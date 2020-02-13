@@ -13,10 +13,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-<<<<<<< Updated upstream
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-=======
->>>>>>> Stashed changes
         gameView = new GameView(this);
         setContentView(gameView);
         gameView.run();

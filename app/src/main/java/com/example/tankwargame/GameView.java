@@ -22,12 +22,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private SurfaceHolder mSurfaceHolder;
     private Paint mPaint;
-<<<<<<< Updated upstream
     private Canvas mCanvas;
-
-    private volatile boolean mRunning;
-=======
->>>>>>> Stashed changes
 
     private volatile boolean mRunning;
 
@@ -45,7 +40,6 @@ public class GameView extends SurfaceView implements Runnable {
         mPaint = new Paint();
         mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
         mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
-        mRunning = true;
     }
 
     /**
@@ -70,7 +64,12 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     public void run() {
         while (mRunning) {
-<<<<<<< Updated upstream
+            long startFrameTime = System.currentTimeMillis();
+            timeThisFrame = System.currentTimeMillis() - startFrameTime;
+            if(timeThisFrame > 0){
+                //The following 1000 comes from 1000ms in a second
+                fps = 1000 / timeThisFrame;
+            }
             draw();
             }
         }
@@ -84,18 +83,6 @@ public class GameView extends SurfaceView implements Runnable {
             this.mCanvas.drawBitmap(aiTank.mBitmapFile, aiTank.getX(), aiTank.getY(), mPaint);
             this.mCanvas.restore();
             this. mSurfaceHolder.unlockCanvasAndPost(mCanvas);
-=======
-            long startFrameTime = System.currentTimeMillis();
-            //Update the frame
-            update();
-            //Draw the frame
-            draw();
-            //Calculate the fps for this frame for timing animations
-            timeThisFrame = System.currentTimeMillis() - startFrameTime;
-            if(timeThisFrame > 0){
-                //The following 1000 comes from 1000ms in a second
-                fps = 1000 / timeThisFrame;
-            }
         }
     }
 
@@ -110,7 +97,7 @@ public class GameView extends SurfaceView implements Runnable {
     * 6.5 Cycle through ADT that holds drawable objects and draw them
     * 7. Draw everything to screen by unlocking surface and posting canvas to it
     * */
-    public void draw() {
+/*    public void draw() {
         Canvas mCanvas;
         if(mSurfaceHolder.getSurface().isValid()) {
             mCanvas = mSurfaceHolder.lockCanvas();
@@ -122,9 +109,8 @@ public class GameView extends SurfaceView implements Runnable {
 //            mCanvas.drawBitmap(playerTank.mBitmapFile, playerTank.getX(), playerTank.getY(), mPaint);
 //            mCanvas.drawBitmap(aiTank.mBitmapFile, aiTank.getX(), aiTank.getY(), mPaint);
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);
->>>>>>> Stashed changes
         }
-    }
+    }*/
 
     public void update() {
 
