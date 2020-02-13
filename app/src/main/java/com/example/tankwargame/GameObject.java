@@ -6,6 +6,7 @@ public abstract class GameObject {
     protected int posX;
     protected int posY;
     protected Bitmap mBitmapFile;
+    private int mSpeed = 5;
 
     public int getPosX() {
         return this.posX;

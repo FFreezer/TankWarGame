@@ -50,18 +50,28 @@ public class GameView extends SurfaceView implements Runnable {
         super.onSizeChanged(w, h, oldw, oldh);
         mViewHeight = h;
         mViewWidth = w;
-        playerTank = new Tank(mContext, mPlayerTankBitmap,
-                                ((w / 2) -  (mPlayerTankBitmap.getWidth() / 2)),
-                                (h - (mPlayerTankBitmap.getHeight() * 2)));
-        aiTank = new Tank(mContext, mAITankBitmap,
-                ((w / 2) -  (mAITankBitmap.getWidth() / 2)),
-                mAITankBitmap.getHeight());
+        //oldw & oldh only = 0 when the app first starts
+        if(oldw == 0 && oldh ==0) {
+            playerTank = new Tank(mContext, mPlayerTankBitmap,
+                    ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)),
+                    (h - (mPlayerTankBitmap.getHeight() * 2)));
+            aiTank = new Tank(mContext, mAITankBitmap,
+                    ((w / 2) -  (mAITankBitmap.getWidth() / 2)),
+                    mAITankBitmap.getHeight());
+        }
 
     }
 
+    /*
+    * Main game loop
+    * 1. Initialise the canvas
+    * 2.
+    *
+    * */
     @Override
     public void run() {
         Canvas mCanvas;
+//        initialiseGame();
         while (mRunning) {
             if (mSurfaceHolder.getSurface().isValid()) {
                 mCanvas = mSurfaceHolder.lockCanvas();
@@ -77,15 +87,9 @@ public class GameView extends SurfaceView implements Runnable {
         mCanvas = mSurfaceHolder.lockCanvas();
     }
 
-    private void initialiseGame() {
-
-    }
-
-    private void draw() {
-    }
-
-    public void update() {
-    }
+    private void initialiseGame() { }
+    private void draw() { }
+    public void update() { }
 
     public void resume() {
         mRunning = true;
