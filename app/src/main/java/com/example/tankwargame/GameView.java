@@ -74,6 +74,17 @@ public class GameView extends SurfaceView implements Runnable {
             }
         }
 
+    /*
+     * Draw the newly updated scene and its on screen objects
+     * 1. Lock canvas so it is ready to be draw on
+     * 2. Draw the background color to green for grass
+     * 3. Choose the paint brush color for drawing player lives
+     * 4. Change text size to make it a bit larger and legible
+     * 5. Display fps on screen (Can be hidden this is just temporary)
+     * 6. Draw player tank and ai tank
+     * 6.5 Cycle through ADT that holds drawable objects and draw them
+     * 7. Draw everything to screen by unlocking surface and posting canvas to it
+     * */
     private void draw() {
         if (mSurfaceHolder.getSurface().isValid()) {
             this.mCanvas = mSurfaceHolder.lockCanvas();
@@ -85,32 +96,6 @@ public class GameView extends SurfaceView implements Runnable {
             this. mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
     }
-
-    /*
-    * Draw the newly updated scene and its on screen objects
-    * 1. Lock canvas so it is ready to be draw on
-    * 2. Draw the background color to green for grass
-    * 3. Choose the paint brush color for drawing player lives
-    * 4. Change text size to make it a bit larger and legible
-    * 5. Display fps on screen (Can be hidden this is just temporary)
-    * 6. Draw player tank and ai tank
-    * 6.5 Cycle through ADT that holds drawable objects and draw them
-    * 7. Draw everything to screen by unlocking surface and posting canvas to it
-    * */
-/*    public void draw() {
-        Canvas mCanvas;
-        if(mSurfaceHolder.getSurface().isValid()) {
-            mCanvas = mSurfaceHolder.lockCanvas();
-            mCanvas.save();
-            mCanvas.drawColor(getResources().getColor(R.color.game_background_color));
-//            mPaint.setColor(Color.BLACK);
-//            mPaint.setTextSize(50);
-//            mCanvas.drawText("FPS:" + fps, 20, 40, mPaint);
-//            mCanvas.drawBitmap(playerTank.mBitmapFile, playerTank.getX(), playerTank.getY(), mPaint);
-//            mCanvas.drawBitmap(aiTank.mBitmapFile, aiTank.getX(), aiTank.getY(), mPaint);
-            mSurfaceHolder.unlockCanvasAndPost(mCanvas);
-        }
-    }*/
 
     public void update() {
 
