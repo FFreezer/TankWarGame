@@ -13,16 +13,18 @@ import android.view.SurfaceView;
 import android.widget.ImageView;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class GameView extends SurfaceView implements Runnable {
 
     private Context mContext;
     private Thread mGameThread = null;
+
     private SurfaceHolder mSurfaceHolder;
     private Paint mPaint;
-    private volatile boolean mPlaying = false;
-    //    private boolean mPaused = true;
-    private boolean mRunning;
+    private Canvas mCanvas;
+
+    private volatile boolean mRunning;
 
     private long fps;
     private long timeThisFrame;
@@ -48,8 +50,8 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mViewHeight = h;
-        mViewWidth = w;
+        this.mViewHeight = h;
+        this.mViewWidth = w;
         playerTank = new Tank(mContext, mPlayerTankBitmap,
                                 ((w / 2) -  (mPlayerTankBitmap.getWidth() / 2)),
                                 (h - (mPlayerTankBitmap.getHeight() * 2)));
@@ -59,29 +61,24 @@ public class GameView extends SurfaceView implements Runnable {
 
     }
 
+    //This is our main game loop
     @Override
     public void run() {
-        Canvas mCanvas;
         while (mRunning) {
-            if (mSurfaceHolder.getSurface().isValid()) {
-                mCanvas = mSurfaceHolder.lockCanvas();
-                mCanvas.save();
-                mCanvas.drawColor(getResources().getColor(R.color.game_background_color));
-                mCanvas.drawBitmap(playerTank.mBitmapFile, playerTank.getX(), playerTank.getY(), mPaint);
-                mCanvas.drawBitmap(aiTank.mBitmapFile, aiTank.getX(), aiTank.getY(), mPaint);
-                mCanvas.restore();
-                mSurfaceHolder.unlockCanvasAndPost(mCanvas);
+            draw();
             }
         }
 
-        mCanvas = mSurfaceHolder.lockCanvas();
-    }
-
-    private void initialiseGame() {
-
-    }
-
     private void draw() {
+        if (mSurfaceHolder.getSurface().isValid()) {
+            this.mCanvas = mSurfaceHolder.lockCanvas();
+            this.mCanvas.save();
+            this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color));
+            this.mCanvas.drawBitmap(playerTank.mBitmapFile, playerTank.getX(), playerTank.getY(), mPaint);
+            this.mCanvas.drawBitmap(aiTank.mBitmapFile, aiTank.getX(), aiTank.getY(), mPaint);
+            this.mCanvas.restore();
+            this. mSurfaceHolder.unlockCanvasAndPost(mCanvas);
+        }
     }
 
     public void update() {
