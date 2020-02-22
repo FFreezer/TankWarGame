@@ -4,4 +4,5 @@
     <string name="button_move_right">&gt;</string>
     <string name="button_move_up">^</string>
     <string name="button_move_down">V</string>
+    <string name="fire_weapon">FIRE</string>
 </resources>

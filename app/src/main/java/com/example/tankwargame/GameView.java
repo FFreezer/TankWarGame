@@ -10,11 +10,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-
 public class GameView extends SurfaceView implements Runnable {
 
     private Context mContext;
@@ -33,13 +33,18 @@ public class GameView extends SurfaceView implements Runnable {
     private Bitmap mPlayerTankBitmap, mAITankBitmap;
     private Tank playerTank, aiTank;
 
-    public GameView(Context context) {
+    private GameControls mControls;
+    private ArrayList<GameObject> gameObjects;
+
+    public GameView(Context context, GameControls controls) {
         super(context);
         this.mContext = context;
+        this.mControls = controls;
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
         mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
         mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
+        gameObjects = new ArrayList<GameObject>();
     }
 
     /**
@@ -57,7 +62,8 @@ public class GameView extends SurfaceView implements Runnable {
         aiTank = new Tank(mContext, mAITankBitmap,
                 ((w / 2) -  (mAITankBitmap.getWidth() / 2)),
                 mAITankBitmap.getHeight());
-
+        gameObjects.add(playerTank);
+        gameObjects.add(aiTank);
     }
 
     //This is our main game loop
