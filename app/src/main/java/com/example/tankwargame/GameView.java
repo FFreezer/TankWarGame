@@ -1,5 +1,6 @@
 package com.example.tankwargame;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,11 +11,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+
 public class GameView extends SurfaceView implements Runnable {
 
     private Context mContext;
@@ -36,6 +39,7 @@ public class GameView extends SurfaceView implements Runnable {
     private GameControls mControls;
     private ArrayList<GameObject> gameObjects;
 
+    //Constructor
     public GameView(Context context, GameControls controls) {
         super(context);
         this.mContext = context;
@@ -45,6 +49,34 @@ public class GameView extends SurfaceView implements Runnable {
         mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
         mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
         gameObjects = new ArrayList<GameObject>();
+        initialiseControls();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void initialiseControls() {
+        mControls.mButtonLeft.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Pressed down
+//                        playerTank.isMovingLeft = true;
+                        playerTank.moveLeft(fps);
+                        Log.d("LEFT BUTTON", "PRESSED");
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        // Released
+                        playerTank.isMovingLeft = false;
+                        Log.d("LEFT BUTTON", "UNPRESSED");
+                        return true;
+                    case MotionEvent.ACTION_CANCEL:
+                        // Released - Dragged finger outside
+                        playerTank.isMovingLeft = false;
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -57,13 +89,13 @@ public class GameView extends SurfaceView implements Runnable {
         this.mViewHeight = h;
         this.mViewWidth = w;
         playerTank = new Tank(mContext, mPlayerTankBitmap,
-                                ((w / 2) -  (mPlayerTankBitmap.getWidth() / 2)),
-                                (h - (mPlayerTankBitmap.getHeight() * 2)));
+                ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)),
+                (h - (mPlayerTankBitmap.getHeight() * 2)));
         aiTank = new Tank(mContext, mAITankBitmap,
-                ((w / 2) -  (mAITankBitmap.getWidth() / 2)),
+                ((w / 2) - (mAITankBitmap.getWidth() / 2)),
                 mAITankBitmap.getHeight());
         gameObjects.add(playerTank);
-        gameObjects.add(aiTank);
+//        gameObjects.add(aiTank);
     }
 
     //This is our main game loop
@@ -71,14 +103,15 @@ public class GameView extends SurfaceView implements Runnable {
     public void run() {
         while (mRunning) {
             long startFrameTime = System.currentTimeMillis();
+            update();
+            draw();
             timeThisFrame = System.currentTimeMillis() - startFrameTime;
-            if(timeThisFrame > 0){
+            if (timeThisFrame > 0) {
                 //The following 1000 comes from 1000ms in a second
                 fps = 1000 / timeThisFrame;
             }
-            draw();
-            }
         }
+    }
 
     /*
      * Draw the newly updated scene and its on screen objects
@@ -99,12 +132,21 @@ public class GameView extends SurfaceView implements Runnable {
             this.mCanvas.drawBitmap(playerTank.mBitmapFile, playerTank.getX(), playerTank.getY(), mPaint);
             this.mCanvas.drawBitmap(aiTank.mBitmapFile, aiTank.getX(), aiTank.getY(), mPaint);
             this.mCanvas.restore();
-            this. mSurfaceHolder.unlockCanvasAndPost(mCanvas);
+            this.mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
     }
 
     public void update() {
+        for(int iterator = 0; iterator < gameObjects.size(); iterator-=-1){ //lol
+            GameObject currentObject = gameObjects.get(iterator);
+            updateHelper(currentObject);
+        }
+    }
 
+    private void updateHelper(GameObject gameobject){
+        if(gameobject.isMovingLeft){gameobject.moveLeft(fps);}
+        if(gameobject.isMovingRight){gameobject.moveRight(fps);}
+        Log.d("Position", "X " + gameobject.getPosX() + " Y : " + gameobject.getPosY());
     }
 
     //Called in main activity to restart thread
@@ -125,3 +167,5 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 }
+
+
