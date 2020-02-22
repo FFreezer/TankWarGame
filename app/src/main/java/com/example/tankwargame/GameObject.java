@@ -13,15 +13,14 @@ import android.graphics.Bitmap;
 
 public abstract class GameObject {
     //Store coordinates
-    protected long posX;
-    protected long posY;
+    protected long posX, posY;
     //Used when buttons are pressed for GameView.update method
-    protected boolean isMovingLeft = false;
-    protected boolean isMovingRight = false;
-    protected boolean isMovingUp = false;
-    protected boolean isMovingDown = false;
+    protected boolean isMovingLeft, isMovingRight, isMovingUp, isMovingDown = false;
     //Visual style for object
     protected Bitmap mBitmapFile;
+
+    //If you decide to do powerups for speed then you'll need to remove the final declaration
+    private final long speed = 150;
 
     //getters
     public long getPosX() {
@@ -30,19 +29,14 @@ public abstract class GameObject {
     public long getPosY() { return this.posY; }
     public Bitmap getBitmapFile() { return this.mBitmapFile; }
 
-    //Motion methods
-    public void moveLeft(long fps) {
-        posX = posX - (20 / fps);
-    }
-    public void moveRight(long fps) {
-        posX = posX + (10 / fps);
-    }
-    public void moveUp(long fps) {
-        posY = posY + (10 / fps);
-    }
-    public void moveDown(long fps) {
-        posY = posY - (10 / fps);
-    }
+    /*
+    * Motion Events
+    * NOTE: fps + 1 means that the application will never attempt to divide by 0
+    * */
+    public void moveLeft(long fps) { posX = posX - (speed / (fps + 1)); }
+    public void moveRight(long fps) { posX = posX + (speed / (fps + 1)); }
+    public void moveUp(long fps) { posY = posY - (speed / (fps + 1)); }
+    public void moveDown(long fps) { posY = posY + (speed / (fps + 1)); }
 
 
     /*

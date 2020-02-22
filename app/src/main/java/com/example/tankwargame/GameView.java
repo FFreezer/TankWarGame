@@ -12,10 +12,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class GameView extends SurfaceView implements Runnable {
@@ -48,20 +45,20 @@ public class GameView extends SurfaceView implements Runnable {
         mPaint = new Paint();
         mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
         mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
-        gameObjects = new ArrayList<GameObject>();
+        gameObjects = new ArrayList<>();
         initialiseControls();
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void initialiseControls() {
+    private void initialiseControls(){
+        //Controls for left button
         mControls.mButtonLeft.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // Pressed down
-//                        playerTank.isMovingLeft = true;
-                        playerTank.moveLeft(fps);
+                        playerTank.isMovingLeft = true;
                         Log.d("LEFT BUTTON", "PRESSED");
                         return true;
                     case MotionEvent.ACTION_UP:
@@ -72,6 +69,78 @@ public class GameView extends SurfaceView implements Runnable {
                     case MotionEvent.ACTION_CANCEL:
                         // Released - Dragged finger outside
                         playerTank.isMovingLeft = false;
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        //Controls for right button
+        mControls.mButtonRight.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Pressed down
+                        playerTank.isMovingRight = true;
+                        Log.d("RIGHT BUTTON", "PRESSED");
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        // Released
+                        playerTank.isMovingRight = false;
+                        Log.d("RIGHT BUTTON", "UNPRESSED");
+                        return true;
+                    case MotionEvent.ACTION_CANCEL:
+                        // Released - Dragged finger outside
+                        playerTank.isMovingRight = false;
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        //Controls for up button
+        mControls.mButtonUp.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Pressed down
+                        playerTank.isMovingUp = true;
+                        Log.d("UP BUTTON", "PRESSED");
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        // Released
+                        playerTank.isMovingUp = false;
+                        Log.d("UP BUTTON", "UNPRESSED");
+                        return true;
+                    case MotionEvent.ACTION_CANCEL:
+                        // Released - Dragged finger outside
+                        playerTank.isMovingUp = false;
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        //Controls for down button
+        mControls.mButtonDown.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Pressed down
+                        playerTank.isMovingDown = true;
+                        Log.d("DOWN BUTTON", "PRESSED");
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        // Released
+                        playerTank.isMovingDown = false;
+                        Log.d("DOWN BUTTON", "UNPRESSED");
+                        return true;
+                    case MotionEvent.ACTION_CANCEL:
+                        // Released - Dragged finger outside
+                        playerTank.isMovingDown = false;
                         return true;
                 }
                 return false;
@@ -137,7 +206,7 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     public void update() {
-        for(int iterator = 0; iterator < gameObjects.size(); iterator-=-1){ //lol
+        for(int iterator = 0; iterator < gameObjects.size(); iterator++){ //lol
             GameObject currentObject = gameObjects.get(iterator);
             updateHelper(currentObject);
         }
@@ -146,7 +215,10 @@ public class GameView extends SurfaceView implements Runnable {
     private void updateHelper(GameObject gameobject){
         if(gameobject.isMovingLeft){gameobject.moveLeft(fps);}
         if(gameobject.isMovingRight){gameobject.moveRight(fps);}
-        Log.d("Position", "X " + gameobject.getPosX() + " Y : " + gameobject.getPosY());
+        if(gameobject.isMovingUp){gameobject.moveUp(fps);}
+        if(gameobject.isMovingDown){gameobject.moveDown(fps);}
+//        Log.d("Position", "X " + gameobject.getPosX() + " Y : " + gameobject.getPosY() + " FPS " + fps);
+//        Log.d("Movement Params", "" + gameobject.isMovingLeft);
     }
 
     //Called in main activity to restart thread
@@ -168,4 +240,45 @@ public class GameView extends SurfaceView implements Runnable {
     }
 }
 
+//    private void initialiseControls() {
+        //ASK RORY WHY THE FUCK THIS WONT WORK
+//        Button buttons[] = {
+//                mControls.mButtonLeft,
+//                mControls.mButtonRight,
+//                mControls.mButtonDown,
+//                mControls.mButtonUp
+//        };
+//
+//        boolean isMovingValues[] = {
+//                playerTank.isMovingLeft,
+//                playerTank.isMovingRight,
+//                playerTank.isMovingDown,
+//                playerTank.isMovingUp
+//        };
+//
+//        for(int i = 0; i < buttons.length; i++){
+//            buttons[i].setOnTouchListener(new View.OnTouchListener(){
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event){
+//                    switch(event.getAction()){
+//                        case MotionEvent.ACTION_DOWN:
+//                            // Pressed down
+//                            isMovingValues[i] = true;
+//                            Log.d("LEFT BUTTON", "PRESSED");
+//                            return true;
+//                        case MotionEvent.ACTION_UP:
+//                            // Released
+//                            isMovingValues[i] = false;
+//                            Log.d("LEFT BUTTON", "UNPRESSED");
+//                            return true;
+//                        case MotionEvent.ACTION_CANCEL:
+//                            // Released - Dragged finger outside
+//                            isMovingValues[i] = false;
+//                            return true;
+//                    }
+//                    return false;
+//                }
+//            });
+//        }
+//    }
 
