@@ -26,12 +26,12 @@ public class GameView extends SurfaceView implements Runnable {
 
     private volatile boolean mRunning;
 
-    private long timeThisFrame;
     private long fps;
 
     private int mViewHeight, mViewWidth;
     private Bitmap mPlayerTankBitmap, mAITankBitmap;
     private Tank playerTank, aiTank;
+    private Wall wall1,wall2,wall3;
 
     private GameControls mControls;
     private ArrayList<GameObject> gameObjects;
@@ -51,6 +51,10 @@ public class GameView extends SurfaceView implements Runnable {
 
     @SuppressLint("ClickableViewAccessibility")
     private void initialiseControls(){
+        /**
+        * Method Details
+        * Attaches listener events to each of the buttons for moving the player tanks
+        **/
         //Controls for left button
         mControls.mButtonLeft.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -58,6 +62,7 @@ public class GameView extends SurfaceView implements Runnable {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // Pressed down
+                        playerTank.setBitmapFile(mContext,R.drawable.ptankleft);
                         playerTank.isMovingLeft = true;
                         Log.d("LEFT BUTTON", "PRESSED");
                         return true;
@@ -82,6 +87,7 @@ public class GameView extends SurfaceView implements Runnable {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // Pressed down
+                        playerTank.setBitmapFile(mContext, R.drawable.ptankright);
                         playerTank.isMovingRight = true;
                         Log.d("RIGHT BUTTON", "PRESSED");
                         return true;
@@ -106,6 +112,7 @@ public class GameView extends SurfaceView implements Runnable {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // Pressed down
+                        playerTank.setBitmapFile(mContext, R.drawable.ptankup);
                         playerTank.isMovingUp = true;
                         Log.d("UP BUTTON", "PRESSED");
                         return true;
@@ -130,6 +137,7 @@ public class GameView extends SurfaceView implements Runnable {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // Pressed down
+                        playerTank.setBitmapFile(mContext,R.drawable.ptankdown);
                         playerTank.isMovingDown = true;
                         Log.d("DOWN BUTTON", "PRESSED");
                         return true;
@@ -148,23 +156,24 @@ public class GameView extends SurfaceView implements Runnable {
         });
     }
 
-    /**
-     * Cannot currently get the width and height of the screen via onCreate so must get them as the view inflates.
-     * This method is called when the view changes and attempts to move the tanks to an initial starting position
-     **/
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        /**
+         * Method Details
+         * Cannot currently get the width and height of the screen via onCreate so must get them as the view inflates.
+         * This method is called when the view inflates
+         * 1 Tanks are created
+         * 2 Walls are created
+         *
+         **/
         super.onSizeChanged(w, h, oldw, oldh);
         this.mViewHeight = h;
         this.mViewWidth = w;
-        playerTank = new Tank(mContext, mPlayerTankBitmap,
-                ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)),
-                (h - (mPlayerTankBitmap.getHeight() * 2)));
-        aiTank = new Tank(mContext, mAITankBitmap,
-                ((w / 2) - (mAITankBitmap.getWidth() / 2)),
-                mAITankBitmap.getHeight());
+        playerTank = new Tank(mContext, mPlayerTankBitmap, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)));
+        aiTank = new Tank(mContext, mAITankBitmap, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight());
         gameObjects.add(playerTank);
-//        gameObjects.add(aiTank);
+        gameObjects.add(aiTank);
     }
 
     //This is our main game loop
@@ -174,7 +183,7 @@ public class GameView extends SurfaceView implements Runnable {
             long startFrameTime = System.currentTimeMillis();
             update();
             draw();
-            timeThisFrame = System.currentTimeMillis() - startFrameTime;
+            long timeThisFrame = System.currentTimeMillis() - startFrameTime;
             if (timeThisFrame > 0) {
                 //The following 1000 comes from 1000ms in a second
                 fps = 1000 / timeThisFrame;
@@ -182,18 +191,19 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
-    /*
-     * Draw the newly updated scene and its on screen objects
-     * 1. Lock canvas so it is ready to be draw on
-     * 2. Draw the background color to green for grass
-     * 3. Choose the paint brush color for drawing player lives
-     * 4. Change text size to make it a bit larger and legible
-     * 5. Display fps on screen (Can be hidden this is just temporary)
-     * 6. Draw player tank and ai tank
-     * 6.5 Cycle through ADT that holds drawable objects and draw them
-     * 7. Draw everything to screen by unlocking surface and posting canvas to it
-     * */
     private void draw() {
+        /**
+         * Method Details
+         * Draw the newly updated scene and its on screen objects
+         * 1. Lock canvas so it is ready to be draw on
+         * 2. Draw the background color to green for grass
+         * 3. Choose the paint brush color for drawing player lives
+         * 4. Change text size to make it a bit larger and legible
+         * 5. Display fps on screen (Can be hidden this is just temporary)
+         * 6. Draw player tank and ai tank
+         * 6.5 Cycle through ADT that holds drawable objects and draw them
+         * 7. Draw everything to screen by unlocking surface and posting canvas to it
+         * */
         if (mSurfaceHolder.getSurface().isValid()) {
             this.mCanvas = mSurfaceHolder.lockCanvas();
             this.mCanvas.save();
@@ -206,7 +216,7 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     public void update() {
-        for(int iterator = 0; iterator < gameObjects.size(); iterator++){ //lol
+        for(int iterator = 0; iterator < gameObjects.size(); iterator++){
             GameObject currentObject = gameObjects.get(iterator);
             updateHelper(currentObject);
         }
@@ -241,7 +251,7 @@ public class GameView extends SurfaceView implements Runnable {
 }
 
 //    private void initialiseControls() {
-        //ASK RORY WHY THE FUCK THIS WONT WORK
+////        ASK RORY WHY THE FUCK THIS WONT WORK
 //        Button buttons[] = {
 //                mControls.mButtonLeft,
 //                mControls.mButtonRight,
