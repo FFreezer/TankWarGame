@@ -13,10 +13,10 @@ public class Wall extends GameObject {
     Wall(Context context, int screenWidth, int screenHeight){
         /**
         * Constructor Details
-        * 1. Retrieve context for painting
-        * 2. Calculate random number for further use, multiply by 100_000
-        * 3. Modulo random number by 1/4th of screen size to make max width 1/4 of screen width
-        * 4.
+         * 1. Get context
+         * 2. Create a random number generator
+         * 3. Use random number generator to randomly calculate top left corner of wall
+         * 4. Generate rectangles using random number
         * */
         mContext = context;
         Random randomGenerator = new Random();
@@ -32,18 +32,6 @@ public class Wall extends GameObject {
         }
         bottom = top + this.height;
         right = left + this.width;
-
-        //imp 1
-//        this.mContext = context;
-//        int area = 100_000;
-//        double rand = Math.random() * 100_000;
-//        this.width = (int) ((rand % screenWidth) / 4);
-//        this.height = (int) (((area / this.width) % screenHeight) / 6);
-//        top = (int) (rand % screenHeight);
-//        left = (int) (rand % screenWidth);
-//        right = left + this.width;
-//        bottom = top + this.height;
-
     }
 
     //getter methods

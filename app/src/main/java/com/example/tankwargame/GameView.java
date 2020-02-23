@@ -34,7 +34,8 @@ public class GameView extends SurfaceView implements Runnable {
     private Wall wall1,wall2,wall3;
 
     private GameControls mControls;
-    private ArrayList<GameObject> gameObjects;
+    private ArrayList<GameObject> unmoveableGameObjects;
+    private ArrayList<IMoveable> moveableGameObjects;
 
     //Constructor
     public GameView(Context context, GameControls controls) {
@@ -46,7 +47,8 @@ public class GameView extends SurfaceView implements Runnable {
         mPaint.setColor(Color.DKGRAY);
         mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
         mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
-        gameObjects = new ArrayList<>();
+        unmoveableGameObjects = new ArrayList<>();
+        moveableGameObjects = new ArrayList<>();
         initialiseControls();
     }
 
@@ -171,13 +173,17 @@ public class GameView extends SurfaceView implements Runnable {
         super.onSizeChanged(w, h, oldw, oldh);
         this.mViewHeight = h;
         this.mViewWidth = w;
+        //Instantiate game objects NOW as you need screen height and width to do so
         playerTank = new Tank(mContext, mPlayerTankBitmap, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)));
         aiTank = new Tank(mContext, mAITankBitmap, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight());
         wall1 = new Wall(mContext, w, h);
         wall2 = new Wall(mContext, w, h);
         wall3 = new Wall(mContext, w, h);
-        gameObjects.add(playerTank);
-        gameObjects.add(aiTank);
+        moveableGameObjects.add(playerTank);
+        moveableGameObjects.add(aiTank);
+        unmoveableGameObjects.add(wall1);
+        unmoveableGameObjects.add(wall2);
+        unmoveableGameObjects.add(wall3);
     }
 
     //This is our main game loop
@@ -222,17 +228,22 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     public void update() {
-        for(int iterator = 0; iterator < gameObjects.size(); iterator++){
-            GameObject currentObject = gameObjects.get(iterator);
-            updateHelper(currentObject);
+        for(int iterator = 0; iterator < moveableGameObjects.size(); iterator++){
+            IMoveable currentMoveableObject = moveableGameObjects.get(iterator);
+            moveableUpdateHelper(currentMoveableObject);
         }
     }
 
-    private void updateHelper(GameObject gameobject){
-        if(gameobject.isMovingLeft){gameobject.moveLeft(fps);}
-        if(gameobject.isMovingRight){gameobject.moveRight(fps);}
-        if(gameobject.isMovingUp){gameobject.moveUp(fps);}
-        if(gameobject.isMovingDown){gameobject.moveDown(fps);}
+    private void moveableUpdateHelper(IMoveable gameobject){
+        /**
+         * Method Details
+         * NOTE : This is the helper method ONLY for game objects that can move like tank shells and tanks
+         *
+        * */
+        if(gameobject.getIsMovingLeft()){gameobject.moveLeft(fps);}
+        if(gameobject.getIsMovingRight()){gameobject.moveRight(fps);}
+        if(gameobject.getIsMovingUp()){gameobject.moveUp(fps);}
+        if(gameobject.getIsMovingDown()){gameobject.moveDown(fps);}
 //        Log.d("Position", "X " + gameobject.getPosX() + " Y : " + gameobject.getPosY() + " FPS " + fps);
 //        Log.d("Movement Params", "" + gameobject.isMovingLeft);
     }
