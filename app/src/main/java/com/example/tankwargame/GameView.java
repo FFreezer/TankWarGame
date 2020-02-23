@@ -43,6 +43,7 @@ public class GameView extends SurfaceView implements Runnable {
         this.mControls = controls;
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
+        mPaint.setColor(Color.DKGRAY);
         mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
         mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
         gameObjects = new ArrayList<>();
@@ -172,6 +173,9 @@ public class GameView extends SurfaceView implements Runnable {
         this.mViewWidth = w;
         playerTank = new Tank(mContext, mPlayerTankBitmap, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)));
         aiTank = new Tank(mContext, mAITankBitmap, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight());
+        wall1 = new Wall(mContext, w, h);
+        wall2 = new Wall(mContext, w, h);
+        wall3 = new Wall(mContext, w, h);
         gameObjects.add(playerTank);
         gameObjects.add(aiTank);
     }
@@ -195,21 +199,23 @@ public class GameView extends SurfaceView implements Runnable {
         /**
          * Method Details
          * Draw the newly updated scene and its on screen objects
-         * 1. Lock canvas so it is ready to be draw on
-         * 2. Draw the background color to green for grass
-         * 3. Choose the paint brush color for drawing player lives
-         * 4. Change text size to make it a bit larger and legible
-         * 5. Display fps on screen (Can be hidden this is just temporary)
-         * 6. Draw player tank and ai tank
-         * 6.5 Cycle through ADT that holds drawable objects and draw them
-         * 7. Draw everything to screen by unlocking surface and posting canvas to it
+         * 1. Check canvas is valid
+         * 2. Save the current canvas so we can draw to it without affecting it
+         * 3. Set background color for the map (or background image)
+         * 4. Draw tanks
+         * 5. Draw walls
+         * 6. Restore canvas
+         * 7. Unlock canvas and draw
          * */
-        if (mSurfaceHolder.getSurface().isValid()) {
-            this.mCanvas = mSurfaceHolder.lockCanvas();
-            this.mCanvas.save();
-            this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color));
-            this.mCanvas.drawBitmap(playerTank.mBitmapFile, playerTank.getX(), playerTank.getY(), mPaint);
-            this.mCanvas.drawBitmap(aiTank.mBitmapFile, aiTank.getX(), aiTank.getY(), mPaint);
+        if (mSurfaceHolder.getSurface().isValid()) { //1
+            this.mCanvas = mSurfaceHolder.lockCanvas(); //2
+            this.mCanvas.save(); //2
+            this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color)); //3
+            this.mCanvas.drawBitmap(playerTank.mBitmapFile, playerTank.getX(), playerTank.getY(), mPaint); //4
+            this.mCanvas.drawBitmap(aiTank.mBitmapFile, aiTank.getX(), aiTank.getY(), mPaint); //4
+            this.mCanvas.drawRect(wall1.getLeft(), wall1.getTop(), wall1.getRight(), wall1.getBottom(), mPaint);
+            this.mCanvas.drawRect(wall2.getLeft(), wall2.getTop(), wall2.getRight(), wall2.getBottom(), mPaint);
+            this.mCanvas.drawRect(wall3.getLeft(), wall3.getTop(), wall3.getRight(), wall3.getBottom(), mPaint);
             this.mCanvas.restore();
             this.mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }

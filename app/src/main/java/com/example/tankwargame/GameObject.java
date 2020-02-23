@@ -4,15 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-/*TODO
- * 1. Add width and height parameters
- * 2. Modify the creation of any currently instantiated game objects to include those parameters as they will
- *       be used for collision detection
- * 3. Modify move methods to allow for the amount to be divided by the games frame rate to movement is calculated accordingly
- *       and if not messed up by the CPU using inconsistent frame cycle times
- *
- * */
-
 public abstract class GameObject {
     //Store coordinates
     protected long posX, posY;
@@ -20,15 +11,14 @@ public abstract class GameObject {
     protected boolean isMovingLeft, isMovingRight, isMovingUp, isMovingDown = false;
     //Visual style for object
     protected Bitmap mBitmapFile;
-
     //If you decide to do powerups for speed then you'll need to remove the final declaration
     private final long speed = 150;
 
     //getters
-    public long getPosX() {
+    public long getX() {
         return this.posX;
     }
-    public long getPosY() { return this.posY; }
+    public long getY() { return this.posY; }
     public Bitmap getBitmapFile() { return this.mBitmapFile; }
 
     //setters
@@ -66,3 +56,12 @@ public abstract class GameObject {
         return false;
     }
 }
+
+/*TODO
+ * 1. Add width and height parameters
+ * 2. Modify the creation of any currently instantiated game objects to include those parameters as they will
+ *       be used for collision detection
+ * 3. Modify move methods to allow for the amount to be divided by the games frame rate to movement is calculated accordingly
+ *       and if not messed up by the CPU using inconsistent frame cycle times
+ *
+ * */

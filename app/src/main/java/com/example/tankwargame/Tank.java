@@ -14,13 +14,7 @@ public class Tank extends GameObject {
         this.posY = y;
     }
     public Context getContext(){ return this.mContext; }
-    public long getX(){ return this.posX; }
-    public long getY(){ return this.posY; }
 
-//    public Bitmap getBitmapFile(){ return this.mBitmapFile; }
-    public Bitmap ChangeBitmap(){
-        return null;
-    }
-
+    public Bitmap getBitmapFile(){ return this.mBitmapFile; }
 
 }
