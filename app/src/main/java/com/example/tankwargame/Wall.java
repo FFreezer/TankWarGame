@@ -1,6 +1,8 @@
 package com.example.tankwargame;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import java.util.Random;
 
@@ -32,6 +34,11 @@ public class Wall extends GameObject {
         }
         bottom = top + this.height;
         right = left + this.width;
+    }
+
+    @Override
+    public void draw(Canvas canvas, Paint paint){
+        canvas.drawRect(left, top, right, bottom, paint);
     }
 
     //getter methods

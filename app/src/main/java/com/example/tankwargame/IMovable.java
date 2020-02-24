@@ -1,6 +1,8 @@
 package com.example.tankwargame;
 
-public interface IMoveable {
+public interface IMovable {
+
+//    public final long speed = 150;
 
     public boolean getIsMovingLeft();
     public boolean getIsMovingRight();

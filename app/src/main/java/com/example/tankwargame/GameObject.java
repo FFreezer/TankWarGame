@@ -3,30 +3,38 @@ package com.example.tankwargame;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 
 public abstract class GameObject {
     //Store coordinates
     protected long posX, posY;
+    protected int width, height;
     //Visual style for object
     protected Bitmap mBitmapFile;
-    //If you decide to do powerups for speed then you'll need to remove the final declaration
-    private final long speed = 150;
+    protected Canvas mCanvas;
+
 
     //getters
-    long getX() {
+    public long getX() {
         return this.posX;
     }
-    long getY() { return this.posY; }
+    public long getY() { return this.posY; }
 
     //setters
     public void setBitmapFile(Context currentContext, int resourceID){
         this.mBitmapFile = BitmapFactory.decodeResource(currentContext.getResources(), resourceID);
     }
 
+
+    public void draw(Canvas canvas, Paint paint){
+        canvas.drawBitmap(mBitmapFile, posX, posY, paint);
+    }
     /*
      * Use this method on game objects by passing it another game object and check if there is overlap in their positions
      * */
     public boolean checkCollisions(GameObject potentialCollider) {
+
         return false;
     }
 
@@ -36,7 +44,9 @@ public abstract class GameObject {
     public boolean checkScreenCollision() {
         return false;
     }
-}
+
+    }
+
 
 /*TODO
  * 1. Add width and height parameters

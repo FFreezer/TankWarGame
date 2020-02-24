@@ -34,11 +34,12 @@ public class GameView extends SurfaceView implements Runnable {
     private Wall wall1,wall2,wall3;
 
     private GameControls mControls;
-    private ArrayList<GameObject> unmoveableGameObjects;
-    private ArrayList<IMoveable> moveableGameObjects;
+    //We are using two different ArrayLists so that we can reduce the amount of unnecessary calculations during collision detection
+    private ArrayList<GameObject> gameObjects;
+    private ArrayList<IMovable> movableGameObjects;
 
     //Constructor
-    public GameView(Context context, GameControls controls) {
+    GameView(Context context, GameControls controls) {
         super(context);
         this.mContext = context;
         this.mControls = controls;
@@ -47,8 +48,8 @@ public class GameView extends SurfaceView implements Runnable {
         mPaint.setColor(Color.DKGRAY);
         mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
         mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
-        unmoveableGameObjects = new ArrayList<>();
-        moveableGameObjects = new ArrayList<>();
+        gameObjects = new ArrayList<>();
+        movableGameObjects = new ArrayList<>();
         initialiseControls();
     }
 
@@ -174,16 +175,22 @@ public class GameView extends SurfaceView implements Runnable {
         this.mViewHeight = h;
         this.mViewWidth = w;
         //Instantiate game objects NOW as you need screen height and width to do so
-        playerTank = new Tank(mContext, mPlayerTankBitmap, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)));
-        aiTank = new Tank(mContext, mAITankBitmap, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight());
+        playerTank = new Tank(mContext, R.drawable.ptankup, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)), 'u');
+        aiTank = new Tank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(),'d');
         wall1 = new Wall(mContext, w, h);
         wall2 = new Wall(mContext, w, h);
         wall3 = new Wall(mContext, w, h);
-        moveableGameObjects.add(playerTank);
-        moveableGameObjects.add(aiTank);
-        unmoveableGameObjects.add(wall1);
-        unmoveableGameObjects.add(wall2);
-        unmoveableGameObjects.add(wall3);
+        GameObject shellTest = new Shell(mContext, playerTank, 'd', 50, 50);
+
+        movableGameObjects.add(playerTank);
+        movableGameObjects.add(aiTank);
+        movableGameObjects.add((IMovable) shellTest);
+        gameObjects.add(playerTank);
+        gameObjects.add(aiTank);
+        gameObjects.add(wall1);
+        gameObjects.add(wall2);
+        gameObjects.add(wall3);
+        gameObjects.add(shellTest);
     }
 
     //This is our main game loop
@@ -217,24 +224,30 @@ public class GameView extends SurfaceView implements Runnable {
             this.mCanvas = mSurfaceHolder.lockCanvas(); //2
             this.mCanvas.save(); //2
             this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color)); //3
-            this.mCanvas.drawBitmap(playerTank.mBitmapFile, playerTank.getX(), playerTank.getY(), mPaint); //4
-            this.mCanvas.drawBitmap(aiTank.mBitmapFile, aiTank.getX(), aiTank.getY(), mPaint); //4
-            this.mCanvas.drawRect(wall1.getLeft(), wall1.getTop(), wall1.getRight(), wall1.getBottom(), mPaint);
-            this.mCanvas.drawRect(wall2.getLeft(), wall2.getTop(), wall2.getRight(), wall2.getBottom(), mPaint);
-            this.mCanvas.drawRect(wall3.getLeft(), wall3.getTop(), wall3.getRight(), wall3.getBottom(), mPaint);
+            for(int iterator = 0; iterator < gameObjects.size(); iterator++){
+                gameObjects.get(iterator).draw(mCanvas, mPaint);
+            }
             this.mCanvas.restore();
             this.mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
     }
 
     public void update() {
-        for(int iterator = 0; iterator < moveableGameObjects.size(); iterator++){
-            IMoveable currentMoveableObject = moveableGameObjects.get(iterator);
-            moveableUpdateHelper(currentMoveableObject);
+        /**
+         * Method Details
+         * 1. Iterate through all game objects that are able to move as two 'immovable' objects cannot collide
+         * 2. Attempt to move the object
+         * 3. Check against all other game objects for collision using current direction
+         * 4. If a collision is detected, move the object the opposite direction it was moving when the collision happened
+         * 5. Method logic is complete
+         * */
+        for(int iterator = 0; iterator < movableGameObjects.size(); iterator++){
+            IMovable currentMovableObject = movableGameObjects.get(iterator);
+            movableUpdateHelper(currentMovableObject);
         }
     }
 
-    private void moveableUpdateHelper(IMoveable gameobject){
+    private void movableUpdateHelper(IMovable gameobject){
         /**
          * Method Details
          * NOTE : This is the helper method ONLY for game objects that can move like tank shells and tanks
@@ -266,46 +279,4 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 }
-
-//    private void initialiseControls() {
-////        ASK RORY WHY THE FUCK THIS WONT WORK
-//        Button buttons[] = {
-//                mControls.mButtonLeft,
-//                mControls.mButtonRight,
-//                mControls.mButtonDown,
-//                mControls.mButtonUp
-//        };
-//
-//        boolean isMovingValues[] = {
-//                playerTank.isMovingLeft,
-//                playerTank.isMovingRight,
-//                playerTank.isMovingDown,
-//                playerTank.isMovingUp
-//        };
-//
-//        for(int i = 0; i < buttons.length; i++){
-//            buttons[i].setOnTouchListener(new View.OnTouchListener(){
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event){
-//                    switch(event.getAction()){
-//                        case MotionEvent.ACTION_DOWN:
-//                            // Pressed down
-//                            isMovingValues[i] = true;
-//                            Log.d("LEFT BUTTON", "PRESSED");
-//                            return true;
-//                        case MotionEvent.ACTION_UP:
-//                            // Released
-//                            isMovingValues[i] = false;
-//                            Log.d("LEFT BUTTON", "UNPRESSED");
-//                            return true;
-//                        case MotionEvent.ACTION_CANCEL:
-//                            // Released - Dragged finger outside
-//                            isMovingValues[i] = false;
-//                            return true;
-//                    }
-//                    return false;
-//                }
-//            });
-//        }
-//    }
 
