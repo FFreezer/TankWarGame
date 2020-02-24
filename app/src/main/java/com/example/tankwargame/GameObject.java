@@ -8,10 +8,10 @@ import android.graphics.Paint;
 
 public abstract class GameObject {
     //Store coordinates
-    protected long posX, posY;
-    protected int width, height;
+    long posX, posY;
+    int width, height;
     //Visual style for object
-    protected Bitmap mBitmapFile;
+    Bitmap mBitmapFile;
     protected Canvas mCanvas;
 
 
@@ -36,18 +36,10 @@ public abstract class GameObject {
      * Use this method on game objects by passing it another game object and check if there is overlap in their positions
      * */
     public boolean checkCollisions(GameObject potentialCollider) {
-
         return false;
     }
 
-    /*
-     *
-     * */
-    public boolean checkScreenCollision() {
-        return false;
-    }
-
-    }
+}
 
 
 /*TODO

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,11 @@ public class Tank extends GameObject implements IMovable {
 
     //get methods
     public Context getContext(){ return this.mContext; }
-    public Bitmap getBitmapFile(){ return this.mBitmapFile; }
+    private Bitmap getBitmapFile(){ return this.mBitmapFile; }
+    @Override
+    public int getHeight(){ return this.height ;}
+    @Override
+    public int getWidth(){ return this.width ;}
 
 
     //Implement Methods
@@ -40,6 +45,8 @@ public class Tank extends GameObject implements IMovable {
         mDirection = 'l';
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
+//                Log.d("Player Tank Coords: ", "(X,Y) -> " + this.posX + "," + this.posY);
+//                Log.d("Player Tank Dims :", "(W,H) -> " + this.width + "," + this.height);
                 if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
                     posX = posX + (speed / (fps + 1));
                 }
@@ -63,6 +70,8 @@ public class Tank extends GameObject implements IMovable {
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
                 if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
+                    Log.d("XY", this.posX + "," + this.posY);
+                    Log.d("Collision Detected W/: ", listOfPotentialColliders.get(iterator).toString());
                     posY = posY + (speed / (fps + 1));
                 }
             }
@@ -91,16 +100,13 @@ public class Tank extends GameObject implements IMovable {
     }
 
     public void fireShell(){
-
     }
 
-    private boolean checkForCollisionHelper(ArrayList<GameObject> listOfPotentialColliders) {
-        return false;
-    }
 
 }
 
 /*
 *   TODO
 *    1. Fix and implement the checkForCollision method
+*    2. Wall3 seems to be the problem
 * */

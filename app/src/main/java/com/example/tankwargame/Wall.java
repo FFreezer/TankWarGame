@@ -9,33 +9,20 @@ import java.util.Random;
 public class Wall extends GameObject {
 
     private Context mContext;
-    private int width, height;
     private float top, right, bottom, left;
+    private final int area = 60_000;
 
     Wall(Context context, int screenWidth, int screenHeight){
-        /**
-        * Constructor Details
-         * 1. Get context
-         * 2. Create a random number generator
-         * 3. Use random number generator to randomly calculate top left corner of wall
-         * 4. Generate rectangles using random number
-        * */
         mContext = context;
         Random randomGenerator = new Random();
         top = randomGenerator.nextInt(screenHeight);
         left = randomGenerator.nextInt(screenWidth);
-        this.width = (randomGenerator.nextInt(screenWidth) + 1) / 2;
-        this.height = (randomGenerator.nextInt(screenHeight) + 1) / 10;
-        while(this.width < (screenWidth / 4)){
-            this.width = (randomGenerator.nextInt(screenWidth) + 1) / 2;
-        }
-        while(this.height < (screenHeight / 15)){
-            this.height = (randomGenerator.nextInt(screenHeight) + 1) / 10;
-        }
-        bottom = top + this.height;
-        right = left + this.width;
-        this.posX = (long)(right - left);
-        this.posY = (long)(bottom - top);
+        right = left + (screenWidth / 4);
+        bottom = top + 100;
+        this.height = (int) (bottom - top);
+        this.width = (int) (right - left);
+        this.posX = (long) left;
+        this.posY = (long) top;
     }
 
     @Override

@@ -31,7 +31,6 @@ public class GameView extends SurfaceView implements Runnable {
     private int mViewHeight, mViewWidth;
     private Bitmap mPlayerTankBitmap, mAITankBitmap;
     private Tank playerTank, aiTank;
-    private Wall wall1,wall2,wall3;
 
     private GameControls mControls;
     //We are using two different ArrayLists so that we can reduce the amount of unnecessary calculations during collision detection
@@ -45,7 +44,7 @@ public class GameView extends SurfaceView implements Runnable {
         this.mControls = controls;
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
-        mPaint.setColor(Color.DKGRAY);
+        mPaint.setColor(Color.rgb(44,99,44));
         mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
         mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
         gameObjects = new ArrayList<>();
@@ -177,9 +176,6 @@ public class GameView extends SurfaceView implements Runnable {
         //Instantiate game objects NOW as you need screen height and width to do so
         playerTank = new Tank(mContext, R.drawable.ptankup, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)), 'u');
         aiTank = new Tank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(),'d');
-        wall1 = new Wall(mContext, w, h);
-        wall2 = new Wall(mContext, w, h);
-        wall3 = new Wall(mContext, w, h);
         GameObject shellTest = new Shell(mContext, playerTank, 'd', 50, 50);
 
         movableGameObjects.add(playerTank);
@@ -187,10 +183,11 @@ public class GameView extends SurfaceView implements Runnable {
         movableGameObjects.add((IMovable) shellTest);
         gameObjects.add(playerTank);
         gameObjects.add(aiTank);
-        gameObjects.add(wall1);
-        gameObjects.add(wall2);
-        gameObjects.add(wall3);
-        gameObjects.add(shellTest);
+        for(int numberOfWalls = 0; numberOfWalls < 9; numberOfWalls++){
+            GameObject wall = new Wall(mContext, w, h);
+            gameObjects.add(wall);
+        }
+//        gameObjects.add(shellTest);
     }
 
     //This is our main game loop
@@ -224,6 +221,9 @@ public class GameView extends SurfaceView implements Runnable {
             this.mCanvas = mSurfaceHolder.lockCanvas(); //2
             this.mCanvas.save(); //2
             this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color)); //3
+
+            Log.d("Tank 1 Details", "Height : " + playerTank.getHeight());
+
             for(int iterator = 0; iterator < gameObjects.size(); iterator++){
                 gameObjects.get(iterator).draw(mCanvas, mPaint);
             }
@@ -280,3 +280,8 @@ public class GameView extends SurfaceView implements Runnable {
     }
 }
 
+/*
+* TODO
+*  Look into Singleton design pattern
+*
+* */
