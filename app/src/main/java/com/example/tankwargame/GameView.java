@@ -253,10 +253,10 @@ public class GameView extends SurfaceView implements Runnable {
          * NOTE : This is the helper method ONLY for game objects that can move like tank shells and tanks
          *
         * */
-        if(gameobject.getIsMovingLeft()){gameobject.moveLeft(fps);}
-        if(gameobject.getIsMovingRight()){gameobject.moveRight(fps);}
-        if(gameobject.getIsMovingUp()){gameobject.moveUp(fps);}
-        if(gameobject.getIsMovingDown()){gameobject.moveDown(fps);}
+        if(gameobject.getIsMovingLeft()){gameobject.moveLeft(fps, gameObjects);}
+        if(gameobject.getIsMovingRight()){gameobject.moveRight(fps, gameObjects);}
+        if(gameobject.getIsMovingUp()){gameobject.moveUp(fps, gameObjects);}
+        if(gameobject.getIsMovingDown()){gameobject.moveDown(fps, gameObjects);}
 //        Log.d("Position", "X " + gameobject.getPosX() + " Y : " + gameobject.getPosY() + " FPS " + fps);
 //        Log.d("Movement Params", "" + gameobject.isMovingLeft);
     }

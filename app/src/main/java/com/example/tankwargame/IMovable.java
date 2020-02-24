@@ -1,18 +1,16 @@
 package com.example.tankwargame;
 
-public interface IMovable {
+import java.util.ArrayList;
 
-//    public final long speed = 150;
+public interface IMovable {
 
     public boolean getIsMovingLeft();
     public boolean getIsMovingRight();
     public boolean getIsMovingDown();
     public boolean getIsMovingUp();
 
-    public boolean checkForCollision(GameObject potentialCollider);
-
-    public void moveLeft(long fps);
-    public void moveRight(long fps);
-    public void moveUp(long fps);
-    public void moveDown(long fps);
+    public void moveLeft(long fps, ArrayList<GameObject> listOfPotentialColliders);
+    public void moveRight(long fps, ArrayList<GameObject> listOfPotentialColliders);
+    public void moveUp(long fps, ArrayList<GameObject> listOfPotentialColliders);
+    public void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders);
 }

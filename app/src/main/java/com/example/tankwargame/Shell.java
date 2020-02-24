@@ -5,13 +5,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import java.util.ArrayList;
+
 public class Shell extends GameObject implements IMovable {
 
     private Context mContext;
     private boolean isMovingLeft, isMovingRight, isMovingDown, isMovingUp = false;
     private Tank mShellOwner;
     private Character mDirection;
-    private final long speed = 250;
+    private final long speed = 300;
 
     Shell(Context context, Tank owner, Character direction, int x, int y) {
         this.mContext = context;
@@ -61,18 +63,14 @@ public class Shell extends GameObject implements IMovable {
         return isMovingDown; }
     public boolean getIsMovingUp() {
         return isMovingUp; }
-    public void moveLeft(long fps) {
+    public void moveLeft(long fps, ArrayList<GameObject> listOfPotentialColliders) {
         posX = posX - (speed / (fps + 1)); }
-    public void moveRight(long fps) {
+    public void moveRight(long fps, ArrayList<GameObject> listOfPotentialColliders) {
         posX = posX + (speed / (fps + 1)); }
-    public void moveUp(long fps) {
+    public void moveUp(long fps, ArrayList<GameObject> listOfPotentialColliders) {
         posY = posY - (speed / (fps + 1)); }
-    public void moveDown(long fps) {
+    public void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders) {
         posY = posY + (speed / (fps + 1)); }
 
-    @Override
-    public boolean checkForCollision(GameObject potentialCollider) {
-        return false;
-    }
 
 }

@@ -20,6 +20,8 @@ public abstract class GameObject {
         return this.posX;
     }
     public long getY() { return this.posY; }
+    public int getWidth(){ return this.mBitmapFile.getWidth(); }
+    public int getHeight(){ return this.mBitmapFile.getHeight() ;}
 
     //setters
     public void setBitmapFile(Context currentContext, int resourceID){

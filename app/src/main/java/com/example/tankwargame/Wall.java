@@ -34,6 +34,8 @@ public class Wall extends GameObject {
         }
         bottom = top + this.height;
         right = left + this.width;
+        this.posX = (long)(right - left);
+        this.posY = (long)(bottom - top);
     }
 
     @Override
@@ -43,8 +45,10 @@ public class Wall extends GameObject {
 
     //getter methods
     public Context getContext(){return mContext;}
-    public int getWidth(){return width;}
-    public int getHeight(){return height;}
+    @Override
+    public int getWidth(){return this.width;}
+    @Override
+    public int getHeight(){return this.height;}
     public float getTop(){return top;}
     public float getBottom(){return bottom;}
     public float getLeft(){return left;}

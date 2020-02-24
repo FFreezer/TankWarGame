@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import java.util.ArrayList;
+
 public class Tank extends GameObject implements IMovable {
 
     private Context mContext;
@@ -27,11 +29,62 @@ public class Tank extends GameObject implements IMovable {
     public Context getContext(){ return this.mContext; }
     public Bitmap getBitmapFile(){ return this.mBitmapFile; }
 
-    @Override
-    public boolean checkForCollision(GameObject potentialCollider) {
-        return false;
-    }
 
+    //Implement Methods
+    /**
+     * move____() methods NOTE :
+     *  Calls a helper method to check if the object has collided with another object and if it has then move it back the way it came
+     * */
+    public void moveLeft(long fps, ArrayList<GameObject> listOfPotentialColliders) {
+        posX = posX - (speed / (fps + 1));
+        mDirection = 'l';
+        for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
+            if(!this.equals(listOfPotentialColliders.get(iterator))){
+                if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
+                    posX = posX + (speed / (fps + 1));
+                }
+            }
+        }
+    }
+    public void moveRight(long fps, ArrayList<GameObject> listOfPotentialColliders) {
+        posX = posX + (speed / (fps + 1));
+        mDirection = 'r';
+        for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
+            if(!this.equals(listOfPotentialColliders.get(iterator))){
+                if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
+                    posX = posX - (speed / (fps + 1));
+                }
+            }
+        }
+    }
+    public void moveUp(long fps, ArrayList<GameObject> listOfPotentialColliders) {
+        posY = posY - (speed / (fps + 1));
+        mDirection = 'u';
+        for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
+            if(!this.equals(listOfPotentialColliders.get(iterator))){
+                if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
+                    posY = posY + (speed / (fps + 1));
+                }
+            }
+        }
+    }
+    public void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders) {
+        posY = posY + (speed / (fps + 1));
+        mDirection = 'd';
+        for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
+            if(!this.equals(listOfPotentialColliders.get(iterator))){
+                if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
+                    posY = posY - (speed / (fps + 1));
+                }
+            }
+        }
+    }
+    public boolean getIsMovingLeft(){ return isMovingLeft; }
+    public boolean getIsMovingRight() { return isMovingRight; }
+    public boolean getIsMovingDown() { return isMovingDown; }
+    public boolean getIsMovingUp() { return isMovingUp; }
+
+    //Class Methods
     @Override
     public void draw(Canvas canvas, Paint paint){
         canvas.drawBitmap(this.mBitmapFile, posX, posY, paint);
@@ -41,28 +94,10 @@ public class Tank extends GameObject implements IMovable {
 
     }
 
+    private boolean checkForCollisionHelper(ArrayList<GameObject> listOfPotentialColliders) {
+        return false;
+    }
 
-    //Implement Methods
-    public void moveLeft(long fps) {
-        posX = posX - (speed / (fps + 1));
-        mDirection = 'l';
-    }
-    public void moveRight(long fps) {
-        posX = posX + (speed / (fps + 1));
-        mDirection = 'r';
-    }
-    public void moveUp(long fps) {
-        posY = posY - (speed / (fps + 1));
-        mDirection = 'u';
-    }
-    public void moveDown(long fps) {
-        posY = posY + (speed / (fps + 1));
-        mDirection = 'd';
-    }
-    public boolean getIsMovingLeft(){ return isMovingLeft; }
-    public boolean getIsMovingRight() { return isMovingRight; }
-    public boolean getIsMovingDown() { return isMovingDown; }
-    public boolean getIsMovingUp() { return isMovingUp; }
 }
 
 /*
