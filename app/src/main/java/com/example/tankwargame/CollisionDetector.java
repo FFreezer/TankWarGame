@@ -1,25 +1,12 @@
 package com.example.tankwargame;
 
-import android.util.Log;
-
 class CollisionDetector {
 
-     static boolean checkForTankCollision(Tank tank, GameObject gameobject){
-        // collision detected!
-//        Log.d("Tank Details : ", "X: " + tank.posX + " Y : " + tank.posY + " Height : " + tank.height + " Width : " + tank.width);
-//        Log.d("GameObject Details : ", "X: " + gameobject.posX + " Y : " + gameobject.posY + " Height : " + gameobject.getHeight() + " Width : " + gameobject.getWidth());
-
-        return tank.posX < gameobject.posX + gameobject.getWidth() &&
-                tank.posX + tank.getWidth() > gameobject.posX &&
-                tank.posY < gameobject.posY + gameobject.getHeight() &&
-                tank.posY + tank.getHeight() > gameobject.posY;
+     static boolean checkForTankCollision(GameObject gameobject1, GameObject gameobject2){
+        return gameobject1.posX < gameobject2.posX + gameobject2.getWidth() &&
+                gameobject1.posX + gameobject1.getWidth() > gameobject2.posX &&
+                gameobject1.posY < gameobject2.posY + gameobject2.getHeight() &&
+                gameobject1.posY + gameobject1.getHeight() > gameobject2.posY;
     }
 
 }
-
-
-/*
-*   TODO
-*    FIX COLLISION DETECTION FOR WALLS
-*
-* */

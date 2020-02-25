@@ -21,14 +21,5 @@ class GameControls {
         mButtonRight = right;
         mButtonFire = fire;
     }
-
-    GameControls(Button left, Button right, Button up, Button down, Button fire, Tank tank) {
-        mButtonLeft = left;
-        mButtonDown = down;
-        mButtonLeft = left;
-        mButtonRight = right;
-        mButtonFire = fire;
-        mTank = tank;
-    }
 }
 

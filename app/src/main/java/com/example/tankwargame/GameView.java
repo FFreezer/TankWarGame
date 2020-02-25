@@ -45,8 +45,8 @@ public class GameView extends SurfaceView implements Runnable {
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
         mPaint.setColor(Color.rgb(44,99,44));
-        mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
-        mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
+//        mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
+//        mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
         gameObjects = new ArrayList<>();
         movableGameObjects = new ArrayList<>();
         initialiseControls();
@@ -159,7 +159,6 @@ public class GameView extends SurfaceView implements Runnable {
         });
     }
 
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         /**
@@ -174,20 +173,19 @@ public class GameView extends SurfaceView implements Runnable {
         this.mViewHeight = h;
         this.mViewWidth = w;
         //Instantiate game objects NOW as you need screen height and width to do so
+        mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
+        mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
         playerTank = new Tank(mContext, R.drawable.ptankup, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)), 'u');
         aiTank = new Tank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(),'d');
-        GameObject shellTest = new Shell(mContext, playerTank, 'd', 50, 50);
-
         movableGameObjects.add(playerTank);
         movableGameObjects.add(aiTank);
-        movableGameObjects.add((IMovable) shellTest);
+//        movableGameObjects.add((IMovable) shellTest);
         gameObjects.add(playerTank);
         gameObjects.add(aiTank);
         for(int numberOfWalls = 0; numberOfWalls < 9; numberOfWalls++){
             GameObject wall = new Wall(mContext, w, h);
             gameObjects.add(wall);
         }
-//        gameObjects.add(shellTest);
     }
 
     //This is our main game loop

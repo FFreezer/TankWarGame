@@ -10,7 +10,6 @@ public class Wall extends GameObject {
 
     private Context mContext;
     private float top, right, bottom, left;
-    private final int area = 60_000;
 
     Wall(Context context, int screenWidth, int screenHeight){
         mContext = context;
@@ -46,4 +45,6 @@ public class Wall extends GameObject {
 /*TODO
  * Check area method and make sure size is appropriate and check to see if it needs to be changed
  *   on current screen size, which may vary from device to device
+ * Ensure that if a tank spawns with a wall on top of it that the wall is respawned until it is no
+ *  longer spawning on top of that tank as it prevents it from moving
  **/

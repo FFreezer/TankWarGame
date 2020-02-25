@@ -27,7 +27,6 @@ public class Tank extends GameObject implements IMovable {
     }
 
     //get methods
-    public Context getContext(){ return this.mContext; }
     private Bitmap getBitmapFile(){ return this.mBitmapFile; }
     @Override
     public int getHeight(){ return this.height ;}
@@ -100,6 +99,28 @@ public class Tank extends GameObject implements IMovable {
     }
 
     public void fireShell(){
+        int spawnLocationX,spawnLocationY;
+        spawnLocationX = spawnLocationY = 0;
+        switch(mDirection){
+            case 'u': //up
+                spawnLocationX = (int)(posX + (width / 2));
+                spawnLocationY = (int)posY;
+                break;
+            case 'r': //right
+                spawnLocationX = (int)(posX + width);
+                spawnLocationY = (int)(posY + (height / 2));
+                break;
+            case 'd':
+                spawnLocationX = (int)(posX + (width / 2));
+                spawnLocationY = (int)(posY + getHeight());
+                //down
+                break;
+            case 'l': //left
+                spawnLocationX = (int)posX;
+                spawnLocationY = (int)(posY + (height / 2));
+                break;
+        }
+        IMovable shell = new Shell(mContext, this, mDirection, spawnLocationX, spawnLocationY);
     }
 
 

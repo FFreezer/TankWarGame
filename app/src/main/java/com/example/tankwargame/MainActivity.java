@@ -32,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
         //Inflate game_buttons.xml layout file into a view & define layout paramaters for it in params
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         View controlsView = LayoutInflater.from(this).inflate(R.layout.game_buttons, null, false);
-
-
+        // Get references to user interface buttons and populate class with them for gameView class
         Button mButtonLeft = (Button)controlsView.findViewById(R.id.button_left);
         Button mButtonDown = (Button)controlsView.findViewById(R.id.button_down);
         Button mButtonRight = (Button)controlsView.findViewById(R.id.button_right);
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         addContentView(controlsView, params);
         gameView.run();
     }
-
 
     @Override
     protected void onPause() {

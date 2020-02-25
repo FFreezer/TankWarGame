@@ -13,6 +13,7 @@ public abstract class GameObject {
     //Visual style for object
     Bitmap mBitmapFile;
     protected Canvas mCanvas;
+    Context mContext;
 
 
     //getters
@@ -22,6 +23,7 @@ public abstract class GameObject {
     public long getY() { return this.posY; }
     public int getWidth(){ return this.mBitmapFile.getWidth(); }
     public int getHeight(){ return this.mBitmapFile.getHeight() ;}
+    public Context getContext(){return mContext ;}
 
     //setters
     public void setBitmapFile(Context currentContext, int resourceID){
