@@ -14,7 +14,7 @@ public class Tank extends GameObject implements IMovable {
     private Context mContext;
     boolean isMovingLeft, isMovingRight, isMovingUp, isMovingDown = false;
     private Character mDirection;
-    private final long speed = 150;
+    private final long speed = 250;
 
     Tank(Context context, int bitmapResource, int x, int y, Character direction){
         this.mContext = context;
@@ -69,8 +69,6 @@ public class Tank extends GameObject implements IMovable {
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
                 if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
-                    Log.d("XY", this.posX + "," + this.posY);
-                    Log.d("Collision Detected W/: ", listOfPotentialColliders.get(iterator).toString());
                     posY = posY + (speed / (fps + 1));
                 }
             }
@@ -103,24 +101,26 @@ public class Tank extends GameObject implements IMovable {
         spawnLocationX = spawnLocationY = 0;
         switch(mDirection){
             case 'u': //up
-                spawnLocationX = (int)(posX + (width / 2));
+                spawnLocationX = (int)(posX + (width / 2) - 15);
                 spawnLocationY = (int)posY;
                 break;
             case 'r': //right
                 spawnLocationX = (int)(posX + width);
-                spawnLocationY = (int)(posY + (height / 2));
+                spawnLocationY = (int)(posY + (height / 2) - 15);
                 break;
             case 'd':
-                spawnLocationX = (int)(posX + (width / 2));
+                spawnLocationX = (int)(posX + (width / 2) - 15);
                 spawnLocationY = (int)(posY + getHeight());
                 //down
                 break;
             case 'l': //left
-                spawnLocationX = (int)posX;
-                spawnLocationY = (int)(posY + (height / 2));
+                spawnLocationX = (int)(posX);
+                spawnLocationY = (int)(posY + (height / 2) - 15);
                 break;
         }
-        IMovable shell = new Shell(mContext, this, mDirection, spawnLocationX, spawnLocationY);
+        GameObject shell = new Shell(mContext, this, mDirection, spawnLocationX, spawnLocationY);
+        GameObjectStorage.gameObjects.add(shell);
+        GameObjectStorage.movableGameObjects.add((IMovable) shell);
     }
 
 

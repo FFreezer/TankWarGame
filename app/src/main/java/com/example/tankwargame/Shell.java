@@ -13,7 +13,7 @@ public class Shell extends GameObject implements IMovable {
     private boolean isMovingLeft, isMovingRight, isMovingDown, isMovingUp = false;
     private Tank mShellOwner;
     private Character mDirection;
-    private final long speed = 300;
+    private final long speed = 350;
 
     Shell(Context context, Tank owner, Character direction, int x, int y) {
         this.mContext = context;

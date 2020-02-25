@@ -34,8 +34,8 @@ public class GameView extends SurfaceView implements Runnable {
 
     private GameControls mControls;
     //We are using two different ArrayLists so that we can reduce the amount of unnecessary calculations during collision detection
-    private ArrayList<GameObject> gameObjects;
-    private ArrayList<IMovable> movableGameObjects;
+//    private ArrayList<GameObject> gameObjects;
+//    private ArrayList<IMovable> movableGameObjects;
 
     //Constructor
     GameView(Context context, GameControls controls) {
@@ -47,8 +47,8 @@ public class GameView extends SurfaceView implements Runnable {
         mPaint.setColor(Color.rgb(44,99,44));
 //        mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
 //        mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
-        gameObjects = new ArrayList<>();
-        movableGameObjects = new ArrayList<>();
+//        gameObjects = new ArrayList<>();
+//        movableGameObjects = new ArrayList<>();
         initialiseControls();
     }
 
@@ -157,6 +157,20 @@ public class GameView extends SurfaceView implements Runnable {
                 return false;
             }
         });
+
+        mControls.mButtonFire.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Pressed down
+                        playerTank.fireShell();
+                        Log.d("LEFT BUTTON", "PRESSED");
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -177,14 +191,20 @@ public class GameView extends SurfaceView implements Runnable {
         mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
         playerTank = new Tank(mContext, R.drawable.ptankup, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)), 'u');
         aiTank = new Tank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(),'d');
-        movableGameObjects.add(playerTank);
-        movableGameObjects.add(aiTank);
+//        movableGameObjects.add(playerTank);
+//        movableGameObjects.add(aiTank);
 //        movableGameObjects.add((IMovable) shellTest);
-        gameObjects.add(playerTank);
-        gameObjects.add(aiTank);
+//        gameObjects.add(playerTank);
+//        gameObjects.add(aiTank);
+        GameObjectStorage.addGameObject(playerTank);
+        GameObjectStorage.addGameObject(aiTank);
+        GameObjectStorage.addMovableObject(playerTank);
+        GameObjectStorage.addMovableObject(aiTank);
+
         for(int numberOfWalls = 0; numberOfWalls < 9; numberOfWalls++){
             GameObject wall = new Wall(mContext, w, h);
-            gameObjects.add(wall);
+            GameObjectStorage.addGameObject(wall);
+//            gameObjects.add(wall);
         }
     }
 
@@ -220,10 +240,8 @@ public class GameView extends SurfaceView implements Runnable {
             this.mCanvas.save(); //2
             this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color)); //3
 
-            Log.d("Tank 1 Details", "Height : " + playerTank.getHeight());
-
-            for(int iterator = 0; iterator < gameObjects.size(); iterator++){
-                gameObjects.get(iterator).draw(mCanvas, mPaint);
+            for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
+                GameObjectStorage.gameObjects.get(iterator).draw(mCanvas, mPaint);
             }
             this.mCanvas.restore();
             this.mSurfaceHolder.unlockCanvasAndPost(mCanvas);
@@ -239,8 +257,8 @@ public class GameView extends SurfaceView implements Runnable {
          * 4. If a collision is detected, move the object the opposite direction it was moving when the collision happened
          * 5. Method logic is complete
          * */
-        for(int iterator = 0; iterator < movableGameObjects.size(); iterator++){
-            IMovable currentMovableObject = movableGameObjects.get(iterator);
+        for(int iterator = 0; iterator < GameObjectStorage.movableGameObjects.size(); iterator++){
+            IMovable currentMovableObject = GameObjectStorage.movableGameObjects.get(iterator);
             movableUpdateHelper(currentMovableObject);
         }
     }
@@ -251,10 +269,10 @@ public class GameView extends SurfaceView implements Runnable {
          * NOTE : This is the helper method ONLY for game objects that can move like tank shells and tanks
          *
         * */
-        if(gameobject.getIsMovingLeft()){gameobject.moveLeft(fps, gameObjects);}
-        if(gameobject.getIsMovingRight()){gameobject.moveRight(fps, gameObjects);}
-        if(gameobject.getIsMovingUp()){gameobject.moveUp(fps, gameObjects);}
-        if(gameobject.getIsMovingDown()){gameobject.moveDown(fps, gameObjects);}
+        if(gameobject.getIsMovingLeft()){gameobject.moveLeft(fps, GameObjectStorage.gameObjects);}
+        if(gameobject.getIsMovingRight()){gameobject.moveRight(fps, GameObjectStorage.gameObjects);}
+        if(gameobject.getIsMovingUp()){gameobject.moveUp(fps, GameObjectStorage.gameObjects);}
+        if(gameobject.getIsMovingDown()){gameobject.moveDown(fps, GameObjectStorage.gameObjects);}
 //        Log.d("Position", "X " + gameobject.getPosX() + " Y : " + gameobject.getPosY() + " FPS " + fps);
 //        Log.d("Movement Params", "" + gameobject.isMovingLeft);
     }

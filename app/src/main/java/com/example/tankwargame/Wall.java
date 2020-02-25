@@ -13,15 +13,22 @@ public class Wall extends GameObject {
 
     Wall(Context context, int screenWidth, int screenHeight){
         mContext = context;
-        Random randomGenerator = new Random();
-        top = randomGenerator.nextInt(screenHeight);
-        left = randomGenerator.nextInt(screenWidth);
-        right = left + (screenWidth / 4);
-        bottom = top + 100;
-        this.height = (int) (bottom - top);
-        this.width = (int) (right - left);
-        this.posX = (long) left;
-        this.posY = (long) top;
+        GameObject[] tanks = {
+                (GameObject) GameObjectStorage.movableGameObjects.get(0),
+                (GameObject) GameObjectStorage.movableGameObjects.get(1)
+        };
+        do{
+            Random randomGenerator = new Random();
+            top = randomGenerator.nextInt(screenHeight);
+            left = randomGenerator.nextInt(screenWidth);
+            right = left + (screenWidth / 4);
+            bottom = top + 100;
+            this.height = (int) (bottom - top);
+            this.width = (int) (right - left);
+            this.posX = (long) left;
+            this.posY = (long) top;
+        }while(CollisionDetector.checkForTankCollision(tanks[0], this) || CollisionDetector.checkForTankCollision(tanks[1], this));
+
     }
 
     @Override
