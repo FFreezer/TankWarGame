@@ -13,37 +13,43 @@ public abstract class GameObject {
     //Visual style for object
     Bitmap mBitmapFile;
     protected Canvas mCanvas;
-    Context mContext;
-
+    private Context mContext;
 
     //getters
     public long getX() {
         return this.posX;
     }
-    public long getY() { return this.posY; }
-    public int getWidth(){ return this.mBitmapFile.getWidth(); }
-    public int getHeight(){ return this.mBitmapFile.getHeight() ;}
-    public Context getContext(){return mContext ;}
+
+    public long getY() {
+        return this.posY;
+    }
+
+    public int getWidth() {
+        return this.mBitmapFile.getWidth();
+    }
+
+    public int getHeight() {
+        return this.mBitmapFile.getHeight();
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
 
     //setters
-    public void setBitmapFile(Context currentContext, int resourceID){
+    public void setBitmapFile(Context currentContext, int resourceID) {
         this.mBitmapFile = BitmapFactory.decodeResource(currentContext.getResources(), resourceID);
     }
 
-
-    public void draw(Canvas canvas, Paint paint){
+    public void draw(Canvas canvas, Paint paint) {
         canvas.drawBitmap(mBitmapFile, posX, posY, paint);
     }
-    /*
-     * Use this method on game objects by passing it another game object and check if there is overlap in their positions
-     * */
-    public boolean checkCollisions(GameObject potentialCollider) {
-        return false;
+
+    public void destroy(){
+        GameObjectStorage.gameObjects.remove(this);
     }
 
 }
-
-
 /*TODO
  * 1. Add width and height parameters
  * 2. Modify the creation of any currently instantiated game objects to include those parameters as they will

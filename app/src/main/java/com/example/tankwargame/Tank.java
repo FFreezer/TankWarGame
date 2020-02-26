@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -44,9 +43,7 @@ public class Tank extends GameObject implements IMovable {
         mDirection = 'l';
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
-//                Log.d("Player Tank Coords: ", "(X,Y) -> " + this.posX + "," + this.posY);
-//                Log.d("Player Tank Dims :", "(W,H) -> " + this.width + "," + this.height);
-                if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
+                if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
                     posX = posX + (speed / (fps + 1));
                 }
             }
@@ -57,7 +54,7 @@ public class Tank extends GameObject implements IMovable {
         mDirection = 'r';
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
-                if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
+                if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
                     posX = posX - (speed / (fps + 1));
                 }
             }
@@ -68,7 +65,7 @@ public class Tank extends GameObject implements IMovable {
         mDirection = 'u';
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
-                if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
+                if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
                     posY = posY + (speed / (fps + 1));
                 }
             }
@@ -79,7 +76,7 @@ public class Tank extends GameObject implements IMovable {
         mDirection = 'd';
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
-                if(CollisionDetector.checkForTankCollision(this, listOfPotentialColliders.get(iterator))){
+                if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
                     posY = posY - (speed / (fps + 1));
                 }
             }
@@ -122,7 +119,6 @@ public class Tank extends GameObject implements IMovable {
         GameObjectStorage.gameObjects.add(shell);
         GameObjectStorage.movableGameObjects.add((IMovable) shell);
     }
-
 
 }
 

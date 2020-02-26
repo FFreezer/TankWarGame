@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -52,8 +53,6 @@ public class Shell extends GameObject implements IMovable {
     public Tank getShellOwner(){ return mShellOwner; }
     public Character getDirection(){ return mDirection; }
 
-
-
     //Implement Methods
     public boolean getIsMovingLeft() {
         return isMovingLeft; }
@@ -64,13 +63,56 @@ public class Shell extends GameObject implements IMovable {
     public boolean getIsMovingUp() {
         return isMovingUp; }
     public void moveLeft(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posX = posX - (speed / (fps + 1)); }
+        posX = posX - (speed / (fps + 1));
+        for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
+            GameObject currentObject = listOfPotentialColliders.get(iterator);
+            moveHelper(currentObject);
+        }
+    }
     public void moveRight(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posX = posX + (speed / (fps + 1)); }
+        posX = posX + (speed / (fps + 1));
+        for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
+            GameObject currentObject = listOfPotentialColliders.get(iterator);
+            moveHelper(currentObject);
+        }
+    }
     public void moveUp(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posY = posY - (speed / (fps + 1)); }
+        posY = posY - (speed / (fps + 1));
+        for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
+            GameObject currentObject = listOfPotentialColliders.get(iterator);
+            moveHelper(currentObject);
+        }
+    }
     public void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posY = posY + (speed / (fps + 1)); }
+        posY = posY + (speed / (fps + 1));
+        for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
+            GameObject currentObject = listOfPotentialColliders.get(iterator);
+            moveHelper(currentObject);
+        }
+    }
 
+    private void moveHelper(GameObject currentItem){
+        if(!this.equals(currentItem)){
+            if(CollisionDetector.checkForCollision(this, currentItem)){
+                Log.d("Collision", "DETECTED");
+                if(!(currentItem instanceof Wall || currentItem.equals(this.mShellOwner))){
+                    this.destroy();
+                    currentItem.destroy();;
+                }else if(currentItem instanceof Wall){
+                    this.destroy();
+                }
+            }
+        }
+    }
+
+    public void destroy(){
+        GameObjectStorage.gameObjects.remove(this);
+        GameObjectStorage.movableGameObjects.remove(this);
+    }
 
 }
+
+/*
+* TODO
+*
+* */

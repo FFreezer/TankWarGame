@@ -3,7 +3,6 @@ package com.example.tankwargame;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
 import java.util.Random;
 
 public class Wall extends GameObject {
@@ -27,7 +26,7 @@ public class Wall extends GameObject {
             this.width = (int) (right - left);
             this.posX = (long) left;
             this.posY = (long) top;
-        }while(CollisionDetector.checkForTankCollision(tanks[0], this) || CollisionDetector.checkForTankCollision(tanks[1], this));
+        }while(CollisionDetector.checkForCollision(tanks[0], this) || CollisionDetector.checkForCollision(tanks[1], this));
 
     }
 

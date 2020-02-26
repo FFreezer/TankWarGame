@@ -33,9 +33,6 @@ public class GameView extends SurfaceView implements Runnable {
     private Tank playerTank, aiTank;
 
     private GameControls mControls;
-    //We are using two different ArrayLists so that we can reduce the amount of unnecessary calculations during collision detection
-//    private ArrayList<GameObject> gameObjects;
-//    private ArrayList<IMovable> movableGameObjects;
 
     //Constructor
     GameView(Context context, GameControls controls) {
@@ -67,12 +64,12 @@ public class GameView extends SurfaceView implements Runnable {
                         // Pressed down
                         playerTank.setBitmapFile(mContext,R.drawable.ptankleft);
                         playerTank.isMovingLeft = true;
-                        Log.d("LEFT BUTTON", "PRESSED");
+//                        Log.d("LEFT BUTTON", "PRESSED");
                         return true;
                     case MotionEvent.ACTION_UP:
                         // Released
                         playerTank.isMovingLeft = false;
-                        Log.d("LEFT BUTTON", "UNPRESSED");
+//                        Log.d("LEFT BUTTON", "UNPRESSED");
                         return true;
                     case MotionEvent.ACTION_CANCEL:
                         // Released - Dragged finger outside
@@ -92,12 +89,12 @@ public class GameView extends SurfaceView implements Runnable {
                         // Pressed down
                         playerTank.setBitmapFile(mContext, R.drawable.ptankright);
                         playerTank.isMovingRight = true;
-                        Log.d("RIGHT BUTTON", "PRESSED");
+//                        Log.d("RIGHT BUTTON", "PRESSED");
                         return true;
                     case MotionEvent.ACTION_UP:
                         // Released
                         playerTank.isMovingRight = false;
-                        Log.d("RIGHT BUTTON", "UNPRESSED");
+//                        Log.d("RIGHT BUTTON", "UNPRESSED");
                         return true;
                     case MotionEvent.ACTION_CANCEL:
                         // Released - Dragged finger outside
@@ -117,12 +114,12 @@ public class GameView extends SurfaceView implements Runnable {
                         // Pressed down
                         playerTank.setBitmapFile(mContext, R.drawable.ptankup);
                         playerTank.isMovingUp = true;
-                        Log.d("UP BUTTON", "PRESSED");
+//                        Log.d("UP BUTTON", "PRESSED");
                         return true;
                     case MotionEvent.ACTION_UP:
                         // Released
                         playerTank.isMovingUp = false;
-                        Log.d("UP BUTTON", "UNPRESSED");
+//                        Log.d("UP BUTTON", "UNPRESSED");
                         return true;
                     case MotionEvent.ACTION_CANCEL:
                         // Released - Dragged finger outside
@@ -142,12 +139,12 @@ public class GameView extends SurfaceView implements Runnable {
                         // Pressed down
                         playerTank.setBitmapFile(mContext,R.drawable.ptankdown);
                         playerTank.isMovingDown = true;
-                        Log.d("DOWN BUTTON", "PRESSED");
+//                        Log.d("DOWN BUTTON", "PRESSED");
                         return true;
                     case MotionEvent.ACTION_UP:
                         // Released
                         playerTank.isMovingDown = false;
-                        Log.d("DOWN BUTTON", "UNPRESSED");
+//                        Log.d("DOWN BUTTON", "UNPRESSED");
                         return true;
                     case MotionEvent.ACTION_CANCEL:
                         // Released - Dragged finger outside
@@ -165,7 +162,7 @@ public class GameView extends SurfaceView implements Runnable {
                     case MotionEvent.ACTION_DOWN:
                         // Pressed down
                         playerTank.fireShell();
-                        Log.d("LEFT BUTTON", "PRESSED");
+//                        Log.d("FIRE", "PRESSED");
                         return true;
                 }
                 return false;
@@ -239,7 +236,6 @@ public class GameView extends SurfaceView implements Runnable {
             this.mCanvas = mSurfaceHolder.lockCanvas(); //2
             this.mCanvas.save(); //2
             this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color)); //3
-
             for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
                 GameObjectStorage.gameObjects.get(iterator).draw(mCanvas, mPaint);
             }
@@ -273,8 +269,6 @@ public class GameView extends SurfaceView implements Runnable {
         if(gameobject.getIsMovingRight()){gameobject.moveRight(fps, GameObjectStorage.gameObjects);}
         if(gameobject.getIsMovingUp()){gameobject.moveUp(fps, GameObjectStorage.gameObjects);}
         if(gameobject.getIsMovingDown()){gameobject.moveDown(fps, GameObjectStorage.gameObjects);}
-//        Log.d("Position", "X " + gameobject.getPosX() + " Y : " + gameobject.getPosY() + " FPS " + fps);
-//        Log.d("Movement Params", "" + gameobject.isMovingLeft);
     }
 
     //Called in main activity to restart thread
@@ -299,5 +293,4 @@ public class GameView extends SurfaceView implements Runnable {
 /*
 * TODO
 *  Look into Singleton design pattern
-*
 * */
