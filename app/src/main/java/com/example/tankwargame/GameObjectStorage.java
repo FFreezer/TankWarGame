@@ -2,8 +2,10 @@ package com.example.tankwargame;
 
 import java.util.ArrayList;
 
-public class GameObjectStorage {
+public abstract class GameObjectStorage {
+
     public static ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
+
     public static ArrayList<IMovable> movableGameObjects = new ArrayList<IMovable>();
 
     public static void addGameObject(GameObject objectToAdd) {
@@ -22,11 +24,11 @@ public class GameObjectStorage {
         movableGameObjects.remove(objectToRemove);
     }
 
-    public static int getGameObjectsSize(){
+    public static int getGameObjectsSize() {
         return gameObjects.size();
     }
 
-    public static int getMovableObjectsSize(){
+    public static int getMovableObjectsSize() {
         return movableGameObjects.size();
     }
 

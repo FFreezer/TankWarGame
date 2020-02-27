@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 public class Tank extends GameObject implements IMovable {
 
-    private Context mContext;
-    boolean isMovingLeft, isMovingRight, isMovingUp, isMovingDown = false;
     private Character mDirection;
     private final long speed = 250;
 
@@ -24,14 +22,6 @@ public class Tank extends GameObject implements IMovable {
         this.width = this.getBitmapFile().getWidth();
         this.height = this.getBitmapFile().getHeight();
     }
-
-    //get methods
-    private Bitmap getBitmapFile(){ return this.mBitmapFile; }
-    @Override
-    public int getHeight(){ return this.height ;}
-    @Override
-    public int getWidth(){ return this.width ;}
-
 
     //Implement Methods
     /**
@@ -88,7 +78,6 @@ public class Tank extends GameObject implements IMovable {
     public boolean getIsMovingUp() { return isMovingUp; }
 
     //Class Methods
-    @Override
     public void draw(Canvas canvas, Paint paint){
         canvas.drawBitmap(this.mBitmapFile, posX, posY, paint);
     }
@@ -116,8 +105,8 @@ public class Tank extends GameObject implements IMovable {
                 break;
         }
         GameObject shell = new Shell(mContext, this, mDirection, spawnLocationX, spawnLocationY);
-        GameObjectStorage.gameObjects.add(shell);
-        GameObjectStorage.movableGameObjects.add((IMovable) shell);
+        GameObjectStorage.addGameObject(shell);
+        GameObjectStorage.addMovableObject((IMovable) shell);
     }
 
 }

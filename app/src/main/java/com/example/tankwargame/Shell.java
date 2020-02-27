@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 public class Shell extends GameObject implements IMovable {
 
-    private Context mContext;
-    private boolean isMovingLeft, isMovingRight, isMovingDown, isMovingUp = false;
     private Tank mShellOwner;
     private Character mDirection;
     private final long speed = 350;
@@ -44,57 +42,16 @@ public class Shell extends GameObject implements IMovable {
         }
     }
 
+    //Unique Methods
     public void draw(Canvas canvas, Paint paint){
         canvas.drawBitmap(mBitmapFile, posX, posY, paint);
-    }
-
-    //getters
-    public Context getContext(){ return mContext; }
-    public Tank getShellOwner(){ return mShellOwner; }
-    public Character getDirection(){ return mDirection; }
-
-    //Implement Methods
-    public boolean getIsMovingLeft() {
-        return isMovingLeft; }
-    public boolean getIsMovingRight() {
-        return isMovingRight; }
-    public boolean getIsMovingDown() {
-        return isMovingDown; }
-    public boolean getIsMovingUp() {
-        return isMovingUp; }
-    public void moveLeft(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posX = posX - (speed / (fps + 1));
-        for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
-            GameObject currentObject = listOfPotentialColliders.get(iterator);
-            moveHelper(currentObject);
-        }
-    }
-    public void moveRight(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posX = posX + (speed / (fps + 1));
-        for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
-            GameObject currentObject = listOfPotentialColliders.get(iterator);
-            moveHelper(currentObject);
-        }
-    }
-    public void moveUp(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posY = posY - (speed / (fps + 1));
-        for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
-            GameObject currentObject = listOfPotentialColliders.get(iterator);
-            moveHelper(currentObject);
-        }
-    }
-    public void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posY = posY + (speed / (fps + 1));
-        for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
-            GameObject currentObject = listOfPotentialColliders.get(iterator);
-            moveHelper(currentObject);
-        }
     }
 
     private void moveHelper(GameObject currentItem){
         if(!this.equals(currentItem)){
             if(CollisionDetector.checkForCollision(this, currentItem)){
-                Log.d("Collision", "DETECTED");
+                //YOU CAN ALTERNATE THE FOLLOWING TWO IF STATEMENTS, ONE WILL ALLOW WALLS TO BE DESTROYED AND ONE WILL NOT
+//                if(!currentItem.equals(this.mShellOwner)){
                 if(!(currentItem instanceof Wall || currentItem.equals(this.mShellOwner))){
                     this.destroy();
                     currentItem.destroy();;
@@ -106,13 +63,68 @@ public class Shell extends GameObject implements IMovable {
     }
 
     public void destroy(){
-        GameObjectStorage.gameObjects.remove(this);
-        GameObjectStorage.movableGameObjects.remove(this);
+        GameObjectStorage.removeGameObject(this);
+        GameObjectStorage.removeMovableObject(this);
     }
+
+    //Access Methods
+    public Tank getShellOwner(){ return mShellOwner; }
+    public Character getDirection(){ return mDirection; }
+
+    //Implement Methods
+    public boolean getIsMovingLeft() {
+        return isMovingLeft;
+    }
+
+    public boolean getIsMovingRight() {
+        return isMovingRight;
+    }
+
+    public boolean getIsMovingDown() {
+        return isMovingDown;
+    }
+
+    public boolean getIsMovingUp() {
+        return isMovingUp;
+    }
+    public void moveLeft(long fps, ArrayList<GameObject> listOfPotentialColliders) {
+        posX = posX - (speed / (fps + 1));
+        for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
+            GameObject currentObject = listOfPotentialColliders.get(iterator);
+            moveHelper(currentObject);
+        }
+    }
+
+    public void moveRight(long fps, ArrayList<GameObject> listOfPotentialColliders) {
+        posX = posX + (speed / (fps + 1));
+        for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
+            GameObject currentObject = listOfPotentialColliders.get(iterator);
+            moveHelper(currentObject);
+        }
+    }
+
+    public void moveUp(long fps, ArrayList<GameObject> listOfPotentialColliders) {
+        posY = posY - (speed / (fps + 1));
+        for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
+            GameObject currentObject = listOfPotentialColliders.get(iterator);
+            moveHelper(currentObject);
+        }
+    }
+
+    public void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders) {
+        posY = posY + (speed / (fps + 1));
+        for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
+            GameObject currentObject = listOfPotentialColliders.get(iterator);
+            moveHelper(currentObject);
+        }
+    }
+
 
 }
 
 /*
 * TODO
+*  BUG FIX >>> There seems to be a collision detection bug for the shells where if you fire several at once and ONE collides
+*   with something then it will destroy a bunch of them. LOOK INTO
 *
 * */

@@ -12,7 +12,6 @@ class GameControls {
     Button mButtonDown;
     Button mButtonUp;
     Button mButtonFire;
-    Tank mTank;
 
     GameControls(Button left, Button right, Button up, Button down, Button fire){
         mButtonLeft = left;

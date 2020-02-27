@@ -17,9 +17,6 @@ import android.widget.RelativeLayout;
 public class MainActivity extends AppCompatActivity {
 
     GameView gameView;
-    //Added
-//    FrameLayout game;
-    RelativeLayout mGameButtons;
     GameControls mControls;
 
     @SuppressLint("ResourceType")

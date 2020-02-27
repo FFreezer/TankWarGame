@@ -19,19 +19,13 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Context mContext;
     private Thread mGameThread = null;
-
     private SurfaceHolder mSurfaceHolder;
     private Paint mPaint;
     private Canvas mCanvas;
-
     private volatile boolean mRunning;
-
     private long fps;
-
     private int mViewHeight, mViewWidth;
-    private Bitmap mPlayerTankBitmap, mAITankBitmap;
     private Tank playerTank, aiTank;
-
     private GameControls mControls;
 
     //Constructor
@@ -42,10 +36,6 @@ public class GameView extends SurfaceView implements Runnable {
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
         mPaint.setColor(Color.rgb(44,99,44));
-//        mPlayerTankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ptankup);
-//        mAITankBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.aitankdown);
-//        gameObjects = new ArrayList<>();
-//        movableGameObjects = new ArrayList<>();
         initialiseControls();
     }
 
@@ -184,24 +174,17 @@ public class GameView extends SurfaceView implements Runnable {
         this.mViewHeight = h;
         this.mViewWidth = w;
         //Instantiate game objects NOW as you need screen height and width to do so
-        mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
-        mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
+        Bitmap mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
+        Bitmap mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
         playerTank = new Tank(mContext, R.drawable.ptankup, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)), 'u');
         aiTank = new Tank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(),'d');
-//        movableGameObjects.add(playerTank);
-//        movableGameObjects.add(aiTank);
-//        movableGameObjects.add((IMovable) shellTest);
-//        gameObjects.add(playerTank);
-//        gameObjects.add(aiTank);
         GameObjectStorage.addGameObject(playerTank);
         GameObjectStorage.addGameObject(aiTank);
         GameObjectStorage.addMovableObject(playerTank);
         GameObjectStorage.addMovableObject(aiTank);
-
         for(int numberOfWalls = 0; numberOfWalls < 9; numberOfWalls++){
             GameObject wall = new Wall(mContext, w, h);
             GameObjectStorage.addGameObject(wall);
-//            gameObjects.add(wall);
         }
     }
 
@@ -236,7 +219,7 @@ public class GameView extends SurfaceView implements Runnable {
             this.mCanvas = mSurfaceHolder.lockCanvas(); //2
             this.mCanvas.save(); //2
             this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color)); //3
-            for(int iterator = 0; iterator < GameObjectStorage.gameObjects.size(); iterator++){
+            for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
                 GameObjectStorage.gameObjects.get(iterator).draw(mCanvas, mPaint);
             }
             this.mCanvas.restore();
@@ -253,7 +236,7 @@ public class GameView extends SurfaceView implements Runnable {
          * 4. If a collision is detected, move the object the opposite direction it was moving when the collision happened
          * 5. Method logic is complete
          * */
-        for(int iterator = 0; iterator < GameObjectStorage.movableGameObjects.size(); iterator++){
+        for(int iterator = 0; iterator < GameObjectStorage.getMovableObjectsSize(); iterator++){
             IMovable currentMovableObject = GameObjectStorage.movableGameObjects.get(iterator);
             movableUpdateHelper(currentMovableObject);
         }
@@ -265,10 +248,18 @@ public class GameView extends SurfaceView implements Runnable {
          * NOTE : This is the helper method ONLY for game objects that can move like tank shells and tanks
          *
         * */
-        if(gameobject.getIsMovingLeft()){gameobject.moveLeft(fps, GameObjectStorage.gameObjects);}
-        if(gameobject.getIsMovingRight()){gameobject.moveRight(fps, GameObjectStorage.gameObjects);}
-        if(gameobject.getIsMovingUp()){gameobject.moveUp(fps, GameObjectStorage.gameObjects);}
-        if(gameobject.getIsMovingDown()){gameobject.moveDown(fps, GameObjectStorage.gameObjects);}
+        if (gameobject.getIsMovingLeft()) {
+            gameobject.moveLeft(fps, GameObjectStorage.gameObjects);
+        }
+        if (gameobject.getIsMovingRight()) {
+            gameobject.moveRight(fps, GameObjectStorage.gameObjects);
+        }
+        if (gameobject.getIsMovingUp()) {
+            gameobject.moveUp(fps, GameObjectStorage.gameObjects);
+        }
+        if (gameobject.getIsMovingDown()) {
+            gameobject.moveDown(fps, GameObjectStorage.gameObjects);
+        }
     }
 
     //Called in main activity to restart thread
