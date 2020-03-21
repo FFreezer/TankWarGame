@@ -1,4 +1,7 @@
-package com.example.tankwargame;
+package com.example.tankwargame.TankStates;
+
+import com.example.tankwargame.Interfaces.IState;
+import com.example.tankwargame.GameEntities.Tank;
 
 public class AttackState implements IState {
 

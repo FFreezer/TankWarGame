@@ -1,5 +1,7 @@
 package com.example.tankwargame;
 
+import com.example.tankwargame.GameEntities.Tank;
+
 public class Player {
 
     private int mLives = 3;

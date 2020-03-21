@@ -1,11 +1,13 @@
 package com.example.tankwargame;
 
-class CollisionDetector {
+import com.example.tankwargame.GameEntities.GameObject;
 
-     static boolean checkForCollision(GameObject gameobject1, GameObject gameobject2){
-        return gameobject1.posX < gameobject2.posX + gameobject2.getWidth() &&
-                gameobject1.posX + gameobject1.getWidth() > gameobject2.posX &&
-                gameobject1.posY < gameobject2.posY + gameobject2.getHeight() &&
-                gameobject1.posY + gameobject1.getHeight() > gameobject2.posY;
+public class CollisionDetector {
+
+     public static boolean checkForCollision(GameObject gameobject1, GameObject gameobject2){
+        return gameobject1.getX() < gameobject2.getX() + gameobject2.getWidth() &&
+                gameobject1.getX() + gameobject1.getWidth() > gameobject2.getX() &&
+                gameobject1.getY() < gameobject2.getY() + gameobject2.getHeight() &&
+                gameobject1.getY() + gameobject1.getHeight() > gameobject2.getY();
     }
 }

@@ -1,4 +1,6 @@
-package com.example.tankwargame;
+package com.example.tankwargame.TankStates;
+
+import com.example.tankwargame.Interfaces.IState;
 
 public class IdleState implements IState {
     public IdleState() {

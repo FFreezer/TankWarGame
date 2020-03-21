@@ -1,10 +1,14 @@
-package com.example.tankwargame;
+package com.example.tankwargame.GameEntities;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
+
+import com.example.tankwargame.CollisionDetector;
+import com.example.tankwargame.GameObjectStorage;
+import com.example.tankwargame.Interfaces.IMovable;
+import com.example.tankwargame.R;
 
 import java.util.ArrayList;
 
@@ -42,9 +46,11 @@ public class Shell extends GameObject implements IMovable {
         }
     }
 
+
     //Unique Methods
     public void draw(Canvas canvas, Paint paint){
-        canvas.drawBitmap(mBitmapFile, posX, posY, paint);
+//        canvas.drawBitmap(mBitmapFile, posX, posY, paint);
+        canvas.drawBitmap(getBitmapFile(), getX(), getY(), paint);
     }
 
     private void moveHelper(GameObject currentItem){
@@ -70,6 +76,7 @@ public class Shell extends GameObject implements IMovable {
 
     //Access Methods
     public Tank getShellOwner(){ return mShellOwner; }
+
     public Character getDirection(){ return mDirection; }
 
     //Implement Methods
@@ -86,28 +93,32 @@ public class Shell extends GameObject implements IMovable {
         return isMovingUp;
     }
     public void moveLeft(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posX = posX - (speed / (fps + 1));
+//        posX = posX - (speed / (fps + 1));
+        setPosX(getX() - (speed / (fps + 1)));
         for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
             GameObject currentObject = listOfPotentialColliders.get(iterator);
             moveHelper(currentObject);
         }
     }
     public void moveRight(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posX = posX + (speed / (fps + 1));
+//        posX = posX + (speed / (fps + 1));
+        setPosX(getX() + (speed / (fps + 1)));
         for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
             GameObject currentObject = listOfPotentialColliders.get(iterator);
             moveHelper(currentObject);
         }
     }
     public void moveUp(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posY = posY - (speed / (fps + 1));
+//        posY = posY - (speed / (fps + 1));
+        setPosY(getY() - (speed / (fps + 1)));
         for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
             GameObject currentObject = listOfPotentialColliders.get(iterator);
             moveHelper(currentObject);
         }
     }
     public void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders) {
-        posY = posY + (speed / (fps + 1));
+//        posY = posY + (speed / (fps + 1));
+        setPosY(getY() + (speed / (fps + 1)));
         for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
             GameObject currentObject = listOfPotentialColliders.get(iterator);
             moveHelper(currentObject);

@@ -1,5 +1,8 @@
 package com.example.tankwargame;
 
+import com.example.tankwargame.GameEntities.GameObject;
+import com.example.tankwargame.Interfaces.IMovable;
+
 import java.util.ArrayList;
 
 public abstract class GameObjectStorage {

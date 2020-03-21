@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,7 +12,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import java.util.ArrayList;
+import com.example.tankwargame.GameEntities.EnemyTank;
+import com.example.tankwargame.GameEntities.GameObject;
+import com.example.tankwargame.GameEntities.Tank;
+import com.example.tankwargame.GameEntities.Wall;
+import com.example.tankwargame.Interfaces.IMovable;
 
 public class GameView extends SurfaceView implements Runnable {
 
@@ -54,17 +57,12 @@ public class GameView extends SurfaceView implements Runnable {
                     case MotionEvent.ACTION_DOWN:
                         // Pressed down
                         playerTank.setBitmapFile(mContext,R.drawable.ptankleft);
-                        playerTank.isMovingLeft = true;
-//                        Log.d("LEFT BUTTON", "PRESSED");
+//                        playerTank.isMovingLeft = true;
+                        playerTank.toggleIsMovingLeft();
                         return true;
                     case MotionEvent.ACTION_UP:
-                        // Released
-                        playerTank.isMovingLeft = false;
-//                        Log.d("LEFT BUTTON", "UNPRESSED");
-                        return true;
                     case MotionEvent.ACTION_CANCEL:
-                        // Released - Dragged finger outside
-                        playerTank.isMovingLeft = false;
+                        playerTank.toggleIsMovingLeft();
                         return true;
                 }
                 return false;
@@ -77,19 +75,13 @@ public class GameView extends SurfaceView implements Runnable {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        // Pressed down
                         playerTank.setBitmapFile(mContext, R.drawable.ptankright);
-                        playerTank.isMovingRight = true;
-//                        Log.d("RIGHT BUTTON", "PRESSED");
+//                        playerTank.isMovingRight = true;
+                        playerTank.toggleIsMovingRight();
                         return true;
                     case MotionEvent.ACTION_UP:
-                        // Released
-                        playerTank.isMovingRight = false;
-//                        Log.d("RIGHT BUTTON", "UNPRESSED");
-                        return true;
                     case MotionEvent.ACTION_CANCEL:
-                        // Released - Dragged finger outside
-                        playerTank.isMovingRight = false;
+                        playerTank.toggleIsMovingRight();
                         return true;
                 }
                 return false;
@@ -102,19 +94,12 @@ public class GameView extends SurfaceView implements Runnable {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        // Pressed down
                         playerTank.setBitmapFile(mContext, R.drawable.ptankup);
-                        playerTank.isMovingUp = true;
-//                        Log.d("UP BUTTON", "PRESSED");
+                        playerTank.toggleIsMovingUp();
                         return true;
                     case MotionEvent.ACTION_UP:
-                        // Released
-                        playerTank.isMovingUp = false;
-//                        Log.d("UP BUTTON", "UNPRESSED");
-                        return true;
                     case MotionEvent.ACTION_CANCEL:
-                        // Released - Dragged finger outside
-                        playerTank.isMovingUp = false;
+                        playerTank.toggleIsMovingUp();
                         return true;
                 }
                 return false;
@@ -129,17 +114,11 @@ public class GameView extends SurfaceView implements Runnable {
                     case MotionEvent.ACTION_DOWN:
                         // Pressed down
                         playerTank.setBitmapFile(mContext,R.drawable.ptankdown);
-                        playerTank.isMovingDown = true;
-//                        Log.d("DOWN BUTTON", "PRESSED");
+                        playerTank.toggleIsMovingDown();
                         return true;
                     case MotionEvent.ACTION_UP:
-                        // Released
-                        playerTank.isMovingDown = false;
-//                        Log.d("DOWN BUTTON", "UNPRESSED");
-                        return true;
                     case MotionEvent.ACTION_CANCEL:
-                        // Released - Dragged finger outside
-                        playerTank.isMovingDown = false;
+                        playerTank.toggleIsMovingDown();
                         return true;
                 }
                 return false;

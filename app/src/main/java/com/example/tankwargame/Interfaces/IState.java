@@ -1,4 +1,4 @@
-package com.example.tankwargame;
+package com.example.tankwargame.Interfaces;
 
 public interface IState {
    public abstract void Run();

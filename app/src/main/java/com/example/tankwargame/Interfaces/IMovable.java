@@ -1,4 +1,6 @@
-package com.example.tankwargame;
+package com.example.tankwargame.Interfaces;
+
+import com.example.tankwargame.GameEntities.GameObject;
 
 import java.util.ArrayList;
 
@@ -20,4 +22,5 @@ public interface IMovable {
 
     public abstract void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders);
 
+    //public MovingDirection getDirection();
 }

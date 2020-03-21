@@ -1,10 +1,13 @@
-package com.example.tankwargame;
+package com.example.tankwargame.GameEntities;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
+import com.example.tankwargame.CollisionDetector;
+import com.example.tankwargame.GameObjectStorage;
+import com.example.tankwargame.Interfaces.IMovable;
 
 import java.util.ArrayList;
 
@@ -15,7 +18,7 @@ public class Tank extends GameObject implements IMovable {
     private boolean canFire = true;
 
     //Constructor
-    Tank(Context context, int bitmapResource, int x, int y, Character direction){
+    public Tank(Context context, int bitmapResource, int x, int y, Character direction){
         this.mContext = context;
         this.mBitmapFile = BitmapFactory.decodeResource(context.getResources(), bitmapResource);
         this.posX = x;
@@ -24,8 +27,6 @@ public class Tank extends GameObject implements IMovable {
         this.width = this.getBitmapFile().getWidth();
         this.height = this.getBitmapFile().getHeight();
     }
-
-
 
     //Implement Methods
     /**
@@ -116,7 +117,7 @@ public class Tank extends GameObject implements IMovable {
         }
     }
 
-    void toggleCanFire(){
+    public void toggleCanFire(){
         canFire = (canFire == true) ? false : true;
     }
 }
