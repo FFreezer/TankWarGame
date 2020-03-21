@@ -43,4 +43,11 @@ public class GameActivity extends AppCompatActivity {
         super.onResume();
         gameView.resume();
     }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        GameObjectStorage.gameObjects.clear();
+        GameObjectStorage.movableGameObjects.clear();
+    }
 }
