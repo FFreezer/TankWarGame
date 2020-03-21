@@ -35,7 +35,8 @@ public class GameView extends SurfaceView implements Runnable {
         this.mControls = controls;
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
-        mPaint.setColor(Color.rgb(44,99,44));
+//        mPaint.setColor(Color.rgb(44,99,44));
+        mPaint.setColor(getResources().getColor(R.color.wall_color));
         initialiseControls();
     }
 

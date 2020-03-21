@@ -39,10 +39,10 @@ public class Wall extends GameObject {
     }
 
     //Access Methods
-    public float getTop(){return top;}
-    public float getBottom(){return bottom;}
-    public float getLeft(){return left;}
-    public float getRight(){return right;}
+    public float getTop(){ return top; }
+    public float getBottom(){ return bottom; }
+    public float getLeft(){ return left; }
+    public float getRight(){ return right; }
 
 }
 

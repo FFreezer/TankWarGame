@@ -12,7 +12,7 @@ public class Shell extends GameObject implements IMovable {
 
     private Tank mShellOwner;
     private Character mDirection;
-    private final long speed = 350;
+    private final long speed = 450;
 
     Shell(Context context, Tank owner, Character direction, int x, int y) {
         this.mContext = context;
@@ -65,6 +65,7 @@ public class Shell extends GameObject implements IMovable {
     public void destroy(){
         GameObjectStorage.removeGameObject(this);
         GameObjectStorage.removeMovableObject(this);
+        mShellOwner.toggleCanFire();
     }
 
     //Access Methods
@@ -75,15 +76,12 @@ public class Shell extends GameObject implements IMovable {
     public boolean getIsMovingLeft() {
         return isMovingLeft;
     }
-
     public boolean getIsMovingRight() {
         return isMovingRight;
     }
-
     public boolean getIsMovingDown() {
         return isMovingDown;
     }
-
     public boolean getIsMovingUp() {
         return isMovingUp;
     }
@@ -94,7 +92,6 @@ public class Shell extends GameObject implements IMovable {
             moveHelper(currentObject);
         }
     }
-
     public void moveRight(long fps, ArrayList<GameObject> listOfPotentialColliders) {
         posX = posX + (speed / (fps + 1));
         for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
@@ -102,7 +99,6 @@ public class Shell extends GameObject implements IMovable {
             moveHelper(currentObject);
         }
     }
-
     public void moveUp(long fps, ArrayList<GameObject> listOfPotentialColliders) {
         posY = posY - (speed / (fps + 1));
         for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
@@ -110,7 +106,6 @@ public class Shell extends GameObject implements IMovable {
             moveHelper(currentObject);
         }
     }
-
     public void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders) {
         posY = posY + (speed / (fps + 1));
         for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){

@@ -12,6 +12,7 @@ public class Tank extends GameObject implements IMovable {
 
     private Character mDirection;
     private final long speed = 250;
+    private boolean canFire = true;
 
     Tank(Context context, int bitmapResource, int x, int y, Character direction){
         this.mContext = context;
@@ -21,6 +22,10 @@ public class Tank extends GameObject implements IMovable {
         this.mDirection = direction;
         this.width = this.getBitmapFile().getWidth();
         this.height = this.getBitmapFile().getHeight();
+    }
+
+    void toggleCanFire(){
+        canFire = (canFire == true) ? false : true;
     }
 
     //Implement Methods
@@ -83,30 +88,33 @@ public class Tank extends GameObject implements IMovable {
     }
 
     public void fireShell(){
-        int spawnLocationX,spawnLocationY;
-        spawnLocationX = spawnLocationY = 0;
-        switch(mDirection){
-            case 'u': //up
-                spawnLocationX = (int)(posX + (width / 2) - 15);
-                spawnLocationY = (int)posY;
-                break;
-            case 'r': //right
-                spawnLocationX = (int)(posX + width);
-                spawnLocationY = (int)(posY + (height / 2) - 15);
-                break;
-            case 'd':
-                spawnLocationX = (int)(posX + (width / 2) - 15);
-                spawnLocationY = (int)(posY + getHeight());
-                //down
-                break;
-            case 'l': //left
-                spawnLocationX = (int)(posX);
-                spawnLocationY = (int)(posY + (height / 2) - 15);
-                break;
+        if(canFire) {
+            int spawnLocationX, spawnLocationY;
+            spawnLocationX = spawnLocationY = 0;
+            switch (mDirection) {
+                case 'u': //up
+                    spawnLocationX = (int) (posX + (width / 2) - 15);
+                    spawnLocationY = (int) posY;
+                    break;
+                case 'r': //right
+                    spawnLocationX = (int) (posX + width);
+                    spawnLocationY = (int) (posY + (height / 2) - 15);
+                    break;
+                case 'd':
+                    spawnLocationX = (int) (posX + (width / 2) - 15);
+                    spawnLocationY = (int) (posY + getHeight());
+                    //down
+                    break;
+                case 'l': //left
+                    spawnLocationX = (int) (posX);
+                    spawnLocationY = (int) (posY + (height / 2) - 15);
+                    break;
+            }
+            GameObject shell = new Shell(mContext, this, mDirection, spawnLocationX, spawnLocationY);
+            GameObjectStorage.addGameObject(shell);
+            GameObjectStorage.addMovableObject((IMovable) shell);
+            this.toggleCanFire();
         }
-        GameObject shell = new Shell(mContext, this, mDirection, spawnLocationX, spawnLocationY);
-        GameObjectStorage.addGameObject(shell);
-        GameObjectStorage.addMovableObject((IMovable) shell);
     }
 
 }
