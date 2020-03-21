@@ -14,6 +14,7 @@ public class Tank extends GameObject implements IMovable {
     private final long speed = 250;
     private boolean canFire = true;
 
+    //Constructor
     Tank(Context context, int bitmapResource, int x, int y, Character direction){
         this.mContext = context;
         this.mBitmapFile = BitmapFactory.decodeResource(context.getResources(), bitmapResource);
@@ -24,9 +25,7 @@ public class Tank extends GameObject implements IMovable {
         this.height = this.getBitmapFile().getHeight();
     }
 
-    void toggleCanFire(){
-        canFire = (canFire == true) ? false : true;
-    }
+
 
     //Implement Methods
     /**
@@ -117,6 +116,9 @@ public class Tank extends GameObject implements IMovable {
         }
     }
 
+    void toggleCanFire(){
+        canFire = (canFire == true) ? false : true;
+    }
 }
 
 /*
