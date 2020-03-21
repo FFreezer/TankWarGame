@@ -21,7 +21,6 @@ public abstract class GameObject {
     protected Context mContext;
     protected MovingDirection mMovingDirection = null;
 
-
     //Access Methods
     public long getX() {
         return this.posX;
@@ -39,7 +38,7 @@ public abstract class GameObject {
 
     public Context getContext(){ return this.mContext; }
 
-//    public MovingDirection getDirection(){ return mMovingDirection; }
+    public MovingDirection getMovingDirection(){ return mMovingDirection; }
 
     //Transformers
     public void setBitmapFile(Context currentContext, int resourceID) {

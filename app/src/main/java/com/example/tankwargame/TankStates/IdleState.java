@@ -7,7 +7,7 @@ public class IdleState implements IState {
     }
 
     @Override
-    public void Run() {
+    public void Execute() {
 
     }
 

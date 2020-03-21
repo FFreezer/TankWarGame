@@ -11,7 +11,7 @@ public class AttackState implements IState {
     }
 
     @Override
-    public void Run() {
+    public void Execute() {
         //Define execution logic here
     }
 

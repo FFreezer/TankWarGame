@@ -2,7 +2,7 @@ package com.example.tankwargame;
 
 import com.example.tankwargame.GameEntities.GameObject;
 
-public class CollisionDetector {
+public abstract class CollisionDetector {
 
      public static boolean checkForCollision(GameObject gameobject1, GameObject gameobject2){
         return gameobject1.getX() < gameobject2.getX() + gameobject2.getWidth() &&

@@ -12,6 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameEntities.EnemyTank;
 import com.example.tankwargame.GameEntities.GameObject;
 import com.example.tankwargame.GameEntities.Tank;
@@ -27,7 +28,6 @@ public class GameView extends SurfaceView implements Runnable {
     private Canvas mCanvas;
     private volatile boolean mRunning;
     private long fps;
-    private int mViewHeight, mViewWidth;
     private Tank playerTank, aiTank;
     private GameControls mControls;
 
@@ -55,9 +55,7 @@ public class GameView extends SurfaceView implements Runnable {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        // Pressed down
                         playerTank.setBitmapFile(mContext,R.drawable.ptankleft);
-//                        playerTank.isMovingLeft = true;
                         playerTank.toggleIsMovingLeft();
                         return true;
                     case MotionEvent.ACTION_UP:
@@ -76,7 +74,6 @@ public class GameView extends SurfaceView implements Runnable {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         playerTank.setBitmapFile(mContext, R.drawable.ptankright);
-//                        playerTank.isMovingRight = true;
                         playerTank.toggleIsMovingRight();
                         return true;
                     case MotionEvent.ACTION_UP:
@@ -112,7 +109,6 @@ public class GameView extends SurfaceView implements Runnable {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        // Pressed down
                         playerTank.setBitmapFile(mContext,R.drawable.ptankdown);
                         playerTank.toggleIsMovingDown();
                         return true;
@@ -128,12 +124,9 @@ public class GameView extends SurfaceView implements Runnable {
         mControls.mButtonFire.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Pressed down
-                        playerTank.fireShell();
-//                        Log.d("FIRE", "PRESSED");
-                        return true;
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    playerTank.fireShell();
+                    return true;
                 }
                 return false;
             }
@@ -151,13 +144,11 @@ public class GameView extends SurfaceView implements Runnable {
          *
          **/
         super.onSizeChanged(w, h, oldw, oldh);
-        this.mViewHeight = h;
-        this.mViewWidth = w;
         //Instantiate game objects NOW as you need screen height and width to do so
         Bitmap mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
         Bitmap mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
-        playerTank = new Tank(mContext, R.drawable.ptankup, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)), 'u');
-        aiTank = new EnemyTank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(),'d');
+        playerTank = new Tank(mContext, R.drawable.ptankup, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
+        aiTank = new EnemyTank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN);
         GameObjectStorage.addGameObject(playerTank);
         GameObjectStorage.addGameObject(aiTank);
         GameObjectStorage.addMovableObject(playerTank);
