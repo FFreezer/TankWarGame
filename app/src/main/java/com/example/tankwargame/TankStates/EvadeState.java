@@ -4,9 +4,9 @@ import com.example.tankwargame.GameEntities.EnemyTank;
 import com.example.tankwargame.GameEntities.Tank;
 import com.example.tankwargame.Interfaces.IState;
 
-public class IdleState extends State implements IState {
+public class EvadeState extends State implements IState {
 
-    public IdleState(EnemyTank mAITank, Tank mPlayerTank) {
+    public EvadeState(EnemyTank mAITank, Tank mPlayerTank) {
         super(mAITank, mPlayerTank);
     }
 
@@ -24,7 +24,4 @@ public class IdleState extends State implements IState {
     public void OnStateExit() {
 
     }
-
-
-
 }

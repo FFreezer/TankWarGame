@@ -12,7 +12,7 @@ import com.example.tankwargame.GameObjectStorage;
 public abstract class GameObject {
 
     protected long posX, posY;
-    protected int width, height;
+    protected int mWidth, mHeight;
     protected Bitmap mBitmapFile = null;
     protected boolean isMovingLeft,
             isMovingRight,
@@ -30,9 +30,9 @@ public abstract class GameObject {
         return this.posY;
     }
 
-    public int getWidth(){ return this.width ; }
+    public int getmWidth(){ return this.mWidth; }
 
-    public int getHeight(){ return this.height; }
+    public int getmHeight(){ return this.mHeight; }
 
     public Bitmap getBitmapFile(){ return this.mBitmapFile; }
 

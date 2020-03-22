@@ -15,6 +15,7 @@ import android.view.View;
 import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameEntities.EnemyTank;
 import com.example.tankwargame.GameEntities.GameObject;
+import com.example.tankwargame.GameEntities.MapEdge;
 import com.example.tankwargame.GameEntities.Tank;
 import com.example.tankwargame.GameEntities.Wall;
 import com.example.tankwargame.Interfaces.IMovable;
@@ -27,12 +28,13 @@ public class GameView extends SurfaceView implements Runnable {
     private Paint mPaint;
     private Canvas mCanvas;
     private volatile boolean mRunning;
-    private long fps;
-    private Tank playerTank, aiTank;
+    private static long fps;
+    private Tank playerTank;
+    private EnemyTank aiTank;
     private GameControls mControls;
 
     //Constructor
-    GameView(Context context, GameControls controls) {
+    public GameView(Context context, GameControls controls) {
         super(context);
         this.mContext = context;
         this.mControls = controls;
@@ -137,26 +139,38 @@ public class GameView extends SurfaceView implements Runnable {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         /**
          * Method Details
-         * Cannot currently get the width and height of the screen via onCreate so must get them as the view inflates.
+         * Cannot currently get the mWidth and mHeight of the screen via onCreate so must get them as the view inflates.
          * This method is called when the view inflates
          * 1 Tanks are created
          * 2 Walls are created
          *
          **/
         super.onSizeChanged(w, h, oldw, oldh);
-        //Instantiate game objects NOW as you need screen height and width to do so
+        //Instantiate game objects NOW as you need screen mHeight and mWidth to do so
         Bitmap mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
         Bitmap mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
         playerTank = new Tank(mContext, R.drawable.ptankup, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
-        aiTank = new EnemyTank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN);
+        aiTank = new EnemyTank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN, playerTank);
         GameObjectStorage.addGameObject(playerTank);
         GameObjectStorage.addGameObject(aiTank);
         GameObjectStorage.addMovableObject(playerTank);
         GameObjectStorage.addMovableObject(aiTank);
-        for(int numberOfWalls = 0; numberOfWalls < 9; numberOfWalls++){
-            GameObject wall = new Wall(mContext, w, h);
+        initialiseMapWalls(h,w);
+    }
+
+    private void initialiseMapWalls(int mapHeight, int mapWidth){
+        for(int numberOfWalls = 0; numberOfWalls < 7; numberOfWalls++){
+            GameObject wall = new Wall(mContext, mapWidth, mapHeight);
             GameObjectStorage.addGameObject(wall);
         }
+        MapEdge topEdge = new MapEdge(mContext, mapWidth, mapHeight , 5, mapWidth, 0, 5);
+        MapEdge rightEdge = new MapEdge(mContext, mapWidth, mapHeight, mapHeight, 5, mapWidth, 0);
+        MapEdge bottomEdge = new MapEdge(mContext, mapWidth, mapHeight, 5, mapWidth, 0, mapHeight);
+        MapEdge leftEdge = new MapEdge(mContext, mapWidth, mapHeight, mapHeight, 5, 0,0);
+        GameObjectStorage.addGameObject(topEdge);
+        GameObjectStorage.addGameObject(rightEdge);
+        GameObjectStorage.addGameObject(bottomEdge);
+        GameObjectStorage.addGameObject(leftEdge);
     }
 
     //This is our main game loop
@@ -164,8 +178,9 @@ public class GameView extends SurfaceView implements Runnable {
     public void run() {
         while (mRunning) {
             long startFrameTime = System.currentTimeMillis();
-            update();
             draw();
+            update();
+//            draw();
             long timeThisFrame = System.currentTimeMillis() - startFrameTime;
             if (timeThisFrame > 0) {
                 //The following 1000 comes from 1000ms in a second
@@ -174,18 +189,17 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    /**
+     * * Draw the newly updated scene and its on screen objects
+     *          * 1. Check canvas is valid
+     *          * 2. Save the current canvas so we can draw to it without affecting it
+     *          * 3. Set background color for the map (or background image)
+     *          * 4. Draw tanks
+     *          * 5. Draw walls
+     *          * 6. Restore canvas
+     *          * 7. Unlock canvas and draw
+     */
     private void draw() {
-        /**
-         * Method Details
-         * Draw the newly updated scene and its on screen objects
-         * 1. Check canvas is valid
-         * 2. Save the current canvas so we can draw to it without affecting it
-         * 3. Set background color for the map (or background image)
-         * 4. Draw tanks
-         * 5. Draw walls
-         * 6. Restore canvas
-         * 7. Unlock canvas and draw
-         * */
         if (mSurfaceHolder.getSurface().isValid()) { //1
             this.mCanvas = mSurfaceHolder.lockCanvas(); //2
             this.mCanvas.save(); //2
@@ -196,6 +210,10 @@ public class GameView extends SurfaceView implements Runnable {
             this.mCanvas.restore();
             this.mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
+    }
+
+    public static long getFps(){
+        return fps;
     }
 
     public void update() {
@@ -211,6 +229,9 @@ public class GameView extends SurfaceView implements Runnable {
             IMovable currentMovableObject = GameObjectStorage.movableGameObjects.get(iterator);
             movableUpdateHelper(currentMovableObject);
         }
+        if(aiTank != null){
+            aiTank.executeStateLogic();
+        }
     }
 
     private void movableUpdateHelper(IMovable gameobject){
@@ -220,16 +241,16 @@ public class GameView extends SurfaceView implements Runnable {
          *
         * */
         if (gameobject.getIsMovingLeft()) {
-            gameobject.moveLeft(fps, GameObjectStorage.gameObjects);
+            gameobject.moveLeft();
         }
         if (gameobject.getIsMovingRight()) {
-            gameobject.moveRight(fps, GameObjectStorage.gameObjects);
+            gameobject.moveRight();
         }
         if (gameobject.getIsMovingUp()) {
-            gameobject.moveUp(fps, GameObjectStorage.gameObjects);
+            gameobject.moveUp();
         }
         if (gameobject.getIsMovingDown()) {
-            gameobject.moveDown(fps, GameObjectStorage.gameObjects);
+            gameobject.moveDown();
         }
     }
 

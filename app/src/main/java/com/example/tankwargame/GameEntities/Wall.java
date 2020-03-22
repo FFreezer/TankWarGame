@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class Wall extends GameObject {
 
-    private float top, right, bottom, left;
+    protected float top, right, bottom, left;
 
     public Wall(Context context, int screenWidth, int screenHeight){
         mContext = context;
@@ -30,12 +30,11 @@ public class Wall extends GameObject {
             left = randomGenerator.nextInt(screenWidth);
             right = left + (screenWidth / 4);
             bottom = top + 100;
-            this.height = (int) (bottom - top);
-            this.width = (int) (right - left);
+            this.mHeight = (int) (bottom - top);
+            this.mWidth = (int) (right - left);
             this.posX = (long) left;
             this.posY = (long) top;
         }while(CollisionDetector.checkForCollision(tanks2[0], this) || CollisionDetector.checkForCollision(tanks2[1], this));
-
     }
 
     public void draw(Canvas canvas, Paint paint){

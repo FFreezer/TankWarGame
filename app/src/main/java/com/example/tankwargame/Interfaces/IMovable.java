@@ -14,13 +14,13 @@ public interface IMovable {
 
     public abstract boolean getIsMovingUp();
 
-    public abstract void moveLeft(long fps, ArrayList<GameObject> listOfPotentialColliders);
+    public abstract void moveLeft();
 
-    public abstract void moveRight(long fps, ArrayList<GameObject> listOfPotentialColliders);
+    public abstract void moveRight();
 
-    public abstract void moveUp(long fps, ArrayList<GameObject> listOfPotentialColliders);
+    public abstract void moveUp();
 
-    public abstract void moveDown(long fps, ArrayList<GameObject> listOfPotentialColliders);
+    public abstract void moveDown();
 
     //public MovingDirection getDirection();
 }
