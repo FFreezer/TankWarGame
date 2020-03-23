@@ -114,6 +114,8 @@ public class Tank extends GameObject implements IMovable {
         return this.centerY;
     }
 
+    public boolean isAbleToFire(){ return this.canFire; }
+
     //Transformers
 
     //Class Methods

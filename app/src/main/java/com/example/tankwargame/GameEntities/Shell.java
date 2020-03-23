@@ -83,20 +83,7 @@ public class Shell extends GameObject implements IMovable {
         canvas.drawBitmap(getBitmapFile(), getX(), getY(), paint);
     }
 
-    private void moveHelper(GameObject currentItem){
-        if(!this.equals(currentItem)){
-            if(CollisionDetector.checkForCollision(this, currentItem)){
-                //YOU CAN ALTERNATE THE FOLLOWING TWO IF STATEMENTS, ONE WILL ALLOW WALLS TO BE DESTROYED AND ONE WILL NOT
-//                if(!currentItem.equals(this.mShellOwner)){
-                if(!(currentItem instanceof Wall || currentItem.equals(this.mShellOwner))){
-                    this.destroy();
-                    currentItem.destroy();;
-                }else if(currentItem instanceof Wall){
-                    this.destroy();
-                }
-            }
-        }
-    }
+
 
     public void destroy(){
         GameObjectStorage.removeGameObject(this);
@@ -122,6 +109,32 @@ public class Shell extends GameObject implements IMovable {
     public boolean getIsMovingUp() {
         return isMovingUp;
     }
+
+    public void move(MovingDirection direction){
+        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
+        long fps = GameView.getFps();
+        switch(direction){
+            case UP:
+                setPosY(getY() - (speed / (fps + 1)));
+                mMovingDirection = MovingDirection.UP;
+                break;
+            case DOWN:
+                setPosY(getY() + (speed / (fps + 1)));
+                mMovingDirection = MovingDirection.DOWN;
+                break;
+            case LEFT:
+                setPosX(getX() - (speed / (fps + 1)));
+                mMovingDirection = MovingDirection.LEFT;
+                break;
+            case RIGHT:
+                setPosX(getX() + (speed / (fps + 1)));
+                mMovingDirection = MovingDirection.RIGHT;
+                break;
+            default:
+                break;
+        }
+    }
+
     public void moveLeft() {
         ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
         long fps = GameView.getFps();
@@ -159,7 +172,18 @@ public class Shell extends GameObject implements IMovable {
         }
     }
 
-
+    private void moveHelper(GameObject currentItem){
+        if(!this.equals(currentItem)){
+            if(CollisionDetector.checkForCollision(this, currentItem)){
+                if(!(currentItem instanceof Wall || currentItem.equals(this.mShellOwner))){
+                    this.destroy();
+                    currentItem.destroy();;
+                }else if(currentItem instanceof Wall){
+                    this.destroy();
+                }
+            }
+        }
+    }
 }
 
 /*

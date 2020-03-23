@@ -66,7 +66,7 @@ public abstract class State implements IState {
         return distance;
     }
 
-    protected void toggleMovementState(){
+    protected void toggleMovementDirection(){
         movementState = (movementState == true) ? false : true;
     }
 

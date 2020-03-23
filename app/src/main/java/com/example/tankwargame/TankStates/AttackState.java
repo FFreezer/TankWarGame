@@ -1,9 +1,6 @@
 package com.example.tankwargame.TankStates;
 
-import android.util.Log;
-
 import com.example.tankwargame.GameEntities.EnemyTank;
-import com.example.tankwargame.GameView;
 import com.example.tankwargame.Interfaces.IState;
 import com.example.tankwargame.GameEntities.Tank;
 
@@ -20,21 +17,36 @@ public class AttackState extends State implements IState {
             //Do horizontal movement
             if(isRightOfPlayer()){
                 mAITank.moveLeft();
+                if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
+                    mAITank.fireShell();
+                }
             }else{
                 mAITank.moveRight();
+                if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
+                    mAITank.fireShell();
+                }
             }
-        } else { //movementState == false
+        }
+
+        else { //movementState == false
             //Do vertical movement
             if(isAbovePlayer()){
                 mAITank.moveDown();
+                if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
+                    mAITank.fireShell();
+                }
             }
             else{
                 mAITank.moveUp();
+                if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
+                    mAITank.fireShell();
+                }
             }
         }
+
         if(changeInTime > 750){
             updateComparedToTime();
-            toggleMovementState();
+            toggleMovementDirection();
         }
     }
 
