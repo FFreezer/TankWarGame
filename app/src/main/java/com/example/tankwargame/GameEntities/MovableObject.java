@@ -1,11 +1,9 @@
 package com.example.tankwargame.GameEntities;
 
 import com.example.tankwargame.Enums.MovingDirection;
-import com.example.tankwargame.GameObjectStorage;
 import com.example.tankwargame.GameView;
 import com.example.tankwargame.Interfaces.IMovable;
 
-import java.util.ArrayList;
 
 public abstract class MovableObject extends GameObject implements IMovable {
 

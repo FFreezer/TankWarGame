@@ -8,17 +8,13 @@ import android.graphics.Paint;
 import com.example.tankwargame.CollisionDetector;
 import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameObjectStorage;
-import com.example.tankwargame.GameView;
 import com.example.tankwargame.Interfaces.IMovable;
 import com.example.tankwargame.R;
 
 import java.util.ArrayList;
 
-import static com.example.tankwargame.Enums.MovingDirection.UP;
-
 public class Tank extends MovableObject implements IMovable {
 
-    private Character mDirection;
     private final long speed = 250;
     private boolean canFire = true;
     private long centerX;
@@ -38,7 +34,6 @@ public class Tank extends MovableObject implements IMovable {
     }
 
     //Override Methods
-
     @Override
     public void translatePosition(MovingDirection direction) {
         super.translatePosition(direction);
@@ -46,34 +41,38 @@ public class Tank extends MovableObject implements IMovable {
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
                 if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
-                    translatePositionHelper(direction);
+                    undoMovementDueToCollision(direction);
                 }
             }
         }
         updateCenters();
     }
 
-    private void translatePositionHelper(MovingDirection direction){
+    private void undoMovementDueToCollision(MovingDirection direction){
         switch(direction){
             case UP:
                 super.translatePosition(MovingDirection.DOWN);
+                this.mMovingDirection = direction;
                 this.setBitmapFile(mContext, R.drawable.ptankup);
                 break;
             case DOWN:
                 super.translatePosition(MovingDirection.UP);
+                this.mMovingDirection = direction;
                 this.setBitmapFile(mContext, R.drawable.ptankdown);
                 break;
             case LEFT:
                 super.translatePosition(MovingDirection.RIGHT);
+                this.mMovingDirection = direction;
                 this.setBitmapFile(mContext, R.drawable.ptankleft);
                 break;
             case RIGHT:
                 super.translatePosition(MovingDirection.LEFT);
+                this.mMovingDirection = direction;
                 this.setBitmapFile(mContext, R.drawable.ptankright);
                 break;
         }
     }
-    
+
     public boolean getIsMovingLeft(){ return isMovingLeft; }
     public boolean getIsMovingRight() { return isMovingRight; }
     public boolean getIsMovingDown() { return isMovingDown; }
@@ -134,7 +133,7 @@ public class Tank extends MovableObject implements IMovable {
     }
 
     public void toggleCanFire(){
-        canFire = (canFire == true) ? false : true;
+        canFire = !canFire;
     }
 
 }

@@ -11,83 +11,9 @@ public class AttackState extends State implements IState {
         super(mAITank, mPlayerTank);
     }
 
-//    @Override
-//    public void Execute() {
-//        long changeInTime = System.currentTimeMillis() - State.comparedToTime;
-//        if (movementState) {
-//            //Do horizontal movement
-//            if(isRightOfPlayer()){
-//                mAITank.moveLeft();
-//                if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
-//                    mAITank.fireShell();
-//                }
-//            }else{
-//                mAITank.moveRight();
-//                if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
-//                    mAITank.fireShell();
-//                }
-//            }
-//        }
-//
-//        else { //movementState == false
-//            //Do vertical movement
-//            if(isAbovePlayer()){
-//                mAITank.moveDown();
-//                if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
-//                    mAITank.fireShell();
-//                }
-//            }
-//            else{
-//                mAITank.moveUp();
-//                if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
-//                    mAITank.fireShell();
-//                }
-//            }
-//        }
-//
-//        if(changeInTime > 750){
-//            updateComparedToTime();
-//            toggleMovementDirection();
-//        }
-//    }
-
-
     @Override
     public void Execute() {
-        long changeInTime = System.currentTimeMillis() - State.comparedToTime;
-        if (movementState) {
-            //Do horizontal movement
-            if(isRightOfPlayer()){
-                mAITank.translatePosition(MovingDirection.LEFT);
-                if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
-                    mAITank.fireShell();
-                }
-            }else{
-                mAITank.translatePosition(MovingDirection.RIGHT);
-                if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
-                    mAITank.fireShell();
-                }
-            }
-        } else { //movementState == false
-            //Do vertical movement
-            if(isAbovePlayer()){
-                mAITank.translatePosition(MovingDirection.DOWN);
-                if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
-                    mAITank.fireShell();
-                }
-            }
-            else{
-                mAITank.translatePosition(MovingDirection.UP);
-                if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
-                    mAITank.fireShell();
-                }
-            }
-        }
 
-        if(changeInTime > 750){
-            updateComparedToTime();
-            toggleMovementDirection();
-        }
     }
 
     @Override

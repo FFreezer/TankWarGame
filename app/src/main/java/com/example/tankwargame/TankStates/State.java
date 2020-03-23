@@ -56,18 +56,28 @@ public abstract class State implements IState {
 
     protected float getYDistance(){
         float distance = Math.abs(mAITank.getY() - mPlayerTank.getY());
-        Log.d("Y Distance : ", distance + "");
+//        Log.d("Y Distance : ", distance + "");
         return distance;
     }
 
     protected float getXDistance(){
         float distance = Math.abs(mAITank.getX() - mPlayerTank.getX());
-        Log.d("X Distance : ", distance + "");
+//        Log.d("X Distance : ", distance + "");
         return distance;
     }
 
+    protected int getStraightLineDistance(){
+        float xDistance = Math.abs(mAITank.getCenterX() - mPlayerTank.getCenterX());
+        float yDistance= Math.abs(mAITank.getCenterY() - mPlayerTank.getCenterY());
+        float xDistanceSqr = xDistance * xDistance;
+        float yDistanceSqr = yDistance * yDistance;
+        int answer = (int) Math.sqrt(xDistanceSqr + yDistanceSqr);
+        Log.d("Straight Line D : ", answer + "");
+        return answer;
+    }
+
     protected void toggleMovementDirection(){
-        movementState = (movementState == true) ? false : true;
+        movementState = !movementState;
     }
 
     //Transformers
