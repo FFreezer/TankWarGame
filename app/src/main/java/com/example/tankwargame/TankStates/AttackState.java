@@ -1,5 +1,6 @@
 package com.example.tankwargame.TankStates;
 
+import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameEntities.EnemyTank;
 import com.example.tankwargame.Interfaces.IState;
 import com.example.tankwargame.GameEntities.Tank;
@@ -10,34 +11,73 @@ public class AttackState extends State implements IState {
         super(mAITank, mPlayerTank);
     }
 
+//    @Override
+//    public void Execute() {
+//        long changeInTime = System.currentTimeMillis() - State.comparedToTime;
+//        if (movementState) {
+//            //Do horizontal movement
+//            if(isRightOfPlayer()){
+//                mAITank.moveLeft();
+//                if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
+//                    mAITank.fireShell();
+//                }
+//            }else{
+//                mAITank.moveRight();
+//                if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
+//                    mAITank.fireShell();
+//                }
+//            }
+//        }
+//
+//        else { //movementState == false
+//            //Do vertical movement
+//            if(isAbovePlayer()){
+//                mAITank.moveDown();
+//                if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
+//                    mAITank.fireShell();
+//                }
+//            }
+//            else{
+//                mAITank.moveUp();
+//                if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
+//                    mAITank.fireShell();
+//                }
+//            }
+//        }
+//
+//        if(changeInTime > 750){
+//            updateComparedToTime();
+//            toggleMovementDirection();
+//        }
+//    }
+
+
     @Override
     public void Execute() {
         long changeInTime = System.currentTimeMillis() - State.comparedToTime;
         if (movementState) {
             //Do horizontal movement
             if(isRightOfPlayer()){
-                mAITank.moveLeft();
+                mAITank.translatePosition(MovingDirection.LEFT);
                 if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
                     mAITank.fireShell();
                 }
             }else{
-                mAITank.moveRight();
+                mAITank.translatePosition(MovingDirection.RIGHT);
                 if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
                     mAITank.fireShell();
                 }
             }
-        }
-
-        else { //movementState == false
+        } else { //movementState == false
             //Do vertical movement
             if(isAbovePlayer()){
-                mAITank.moveDown();
+                mAITank.translatePosition(MovingDirection.DOWN);
                 if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
                     mAITank.fireShell();
                 }
             }
             else{
-                mAITank.moveUp();
+                mAITank.translatePosition(MovingDirection.UP);
                 if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
                     mAITank.fireShell();
                 }

@@ -28,7 +28,7 @@ public class Wall extends GameObject {
             Random randomGenerator = new Random();
             top = randomGenerator.nextInt(screenHeight);
             left = randomGenerator.nextInt(screenWidth);
-            right = left + (screenWidth / 4);
+            right = left + (screenWidth / 3);
             bottom = top + 100;
             this.mHeight = (int) (bottom - top);
             this.mWidth = (int) (right - left);

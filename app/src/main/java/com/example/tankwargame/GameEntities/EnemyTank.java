@@ -37,26 +37,26 @@ public class EnemyTank extends Tank {
 
     //Override Methods
     @Override
-    public void moveLeft() {
-        super.moveLeft();
-        this.setBitmapFile(mContext, R.drawable.aitankleft);
+    public void translatePosition(MovingDirection direction) {
+        super.translatePosition(direction);
+        translatePositionHelper(direction);
     }
 
-    @Override
-    public void moveRight() {
-        super.moveRight();
-        this.setBitmapFile(mContext, R.drawable.aitankright);
+    private void translatePositionHelper(MovingDirection direction) {
+        switch(direction){
+            case UP:
+                this.setBitmapFile(mContext, R.drawable.aitankup);
+                break;
+            case DOWN:
+                this.setBitmapFile(mContext, R.drawable.aitankdown);
+                break;
+            case LEFT:
+                this.setBitmapFile(mContext, R.drawable.aitankleft);
+                break;
+            case RIGHT:
+                this.setBitmapFile(mContext, R.drawable.aitankright);
+                break;
+        }
     }
 
-    @Override
-    public void moveUp() {
-        super.moveUp();
-        setBitmapFile(mContext, R.drawable.aitankup);
-    }
-
-    @Override
-    public void moveDown() {
-        super.moveDown();
-        setBitmapFile(mContext, R.drawable.aitankdown);
-    }
 }

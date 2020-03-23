@@ -32,6 +32,7 @@ public class GameView extends SurfaceView implements Runnable {
     private Tank playerTank;
     private EnemyTank aiTank;
     private GameControls mControls;
+    private int mScreenHeight, mScreenWidth;
 
     //Constructor
     public GameView(Context context, GameControls controls) {
@@ -45,6 +46,23 @@ public class GameView extends SurfaceView implements Runnable {
         initialiseControls();
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        /**
+         * Method Details
+         * Cannot currently get the mWidth and mHeight of the screen via onCreate so must get them as the view inflates.
+         * This method is called when the view inflates
+         * 1 Tanks are created
+         * 2 Walls are created
+         *
+         **/
+        super.onSizeChanged(w, h, oldw, oldh);
+        this.mScreenHeight = h;
+        this.mScreenWidth = w;
+        initialiseNewRound(w,h);
+    }
+
+    //Initializers
     @SuppressLint("ClickableViewAccessibility")
     private void initialiseControls(){
         /**
@@ -135,34 +153,18 @@ public class GameView extends SurfaceView implements Runnable {
         });
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        /**
-         * Method Details
-         * Cannot currently get the mWidth and mHeight of the screen via onCreate so must get them as the view inflates.
-         * This method is called when the view inflates
-         * 1 Tanks are created
-         * 2 Walls are created
-         *
-         **/
-        super.onSizeChanged(w, h, oldw, oldh);
-        //Instantiate game objects NOW as you need screen mHeight and mWidth to do so
-        Bitmap mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
-        Bitmap mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
-        playerTank = new Tank(mContext, R.drawable.ptankup, ((w / 2) - (mPlayerTankBitmap.getWidth() / 2)), (h - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
-        aiTank = new EnemyTank(mContext, R.drawable.aitankdown, ((w / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN, playerTank);
-        GameObjectStorage.addGameObject(playerTank);
-        GameObjectStorage.addGameObject(aiTank);
-        GameObjectStorage.addMovableObject(playerTank);
-        GameObjectStorage.addMovableObject(aiTank);
-        initialiseMapWalls(h,w);
+    private void initialiseNewRound(int mapWidth, int mapHeight){
+        initialiseTanks(mapWidth, mapHeight);
+        initialiseMapWalls(mapWidth, mapHeight);
     }
 
-    private void initialiseMapWalls(int mapHeight, int mapWidth){
+    private void initialiseMapWalls(int mapWidth, int mapHeight){
+        //Create some randomly placed barriers that are drawn to screen
         for(int numberOfWalls = 0; numberOfWalls < 7; numberOfWalls++){
             GameObject wall = new Wall(mContext, mapWidth, mapHeight);
             GameObjectStorage.addGameObject(wall);
         }
+        //Create an invisible wall on each edge of the screen for collision detection
         MapEdge topEdge = new MapEdge(mContext, mapWidth, mapHeight , 5, mapWidth, 0, 5);
         MapEdge rightEdge = new MapEdge(mContext, mapWidth, mapHeight, mapHeight, 5, mapWidth, 0);
         MapEdge bottomEdge = new MapEdge(mContext, mapWidth, mapHeight, 5, mapWidth, 0, mapHeight);
@@ -173,7 +175,18 @@ public class GameView extends SurfaceView implements Runnable {
         GameObjectStorage.addGameObject(leftEdge);
     }
 
-    //This is our main game loop
+    private void initialiseTanks(int mapWidth, int mapHeight){
+        Bitmap mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
+        Bitmap mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
+        playerTank = new Tank(mContext, R.drawable.ptankup, ((mapWidth / 2) - (mPlayerTankBitmap.getWidth() / 2)), (mapHeight - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
+        aiTank = new EnemyTank(mContext, R.drawable.aitankdown, ((mapWidth / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN, playerTank);
+        GameObjectStorage.addGameObject(playerTank);
+        GameObjectStorage.addGameObject(aiTank);
+        GameObjectStorage.addMovableObject(playerTank);
+        GameObjectStorage.addMovableObject(aiTank);
+    }
+
+    //Game Critical Methods
     @Override
     public void run() {
         while (mRunning) {
@@ -212,6 +225,7 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    //Access Methods
     public static long getFps(){
         return fps;
     }
@@ -219,10 +233,10 @@ public class GameView extends SurfaceView implements Runnable {
     public void update() {
         /**
          * Method Details
-         * 1. Iterate through all game objects that are able to move as two 'immovable' objects cannot collide
-         * 2. Attempt to move the object
+         * 1. Iterate through all game objects that are able to translatePosition as two 'immovable' objects cannot collide
+         * 2. Attempt to translatePosition the object
          * 3. Check against all other game objects for collision using current direction
-         * 4. If a collision is detected, move the object the opposite direction it was moving when the collision happened
+         * 4. If a collision is detected, translatePosition the object the opposite direction it was moving when the collision happened
          * 5. Method logic is complete
          * */
         for(int iterator = 0; iterator < GameObjectStorage.getMovableObjectsSize(); iterator++){
@@ -234,23 +248,23 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
-    private void movableUpdateHelper(IMovable gameobject){
+    private void movableUpdateHelper(IMovable gameObject){
         /**
          * Method Details
-         * NOTE : This is the helper method ONLY for game objects that can move like tank shells and tanks
+         * NOTE : This is the helper method ONLY for game objects that can translatePosition like tank shells and tanks
          *
         * */
-        if (gameobject.getIsMovingLeft()) {
-            gameobject.moveLeft();
+        if (gameObject.getIsMovingLeft()) {
+            gameObject.translatePosition(MovingDirection.LEFT);
         }
-        if (gameobject.getIsMovingRight()) {
-            gameobject.moveRight();
+        if (gameObject.getIsMovingRight()) {
+            gameObject.translatePosition(MovingDirection.RIGHT);
         }
-        if (gameobject.getIsMovingUp()) {
-            gameobject.moveUp();
+        if (gameObject.getIsMovingUp()) {
+            gameObject.translatePosition(MovingDirection.UP);
         }
-        if (gameobject.getIsMovingDown()) {
-            gameobject.moveDown();
+        if (gameObject.getIsMovingDown()) {
+            gameObject.translatePosition(MovingDirection.DOWN);
         }
     }
 

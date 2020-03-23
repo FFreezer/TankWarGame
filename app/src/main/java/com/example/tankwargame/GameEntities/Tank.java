@@ -10,12 +10,13 @@ import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameObjectStorage;
 import com.example.tankwargame.GameView;
 import com.example.tankwargame.Interfaces.IMovable;
+import com.example.tankwargame.R;
 
 import java.util.ArrayList;
 
 import static com.example.tankwargame.Enums.MovingDirection.UP;
 
-public class Tank extends GameObject implements IMovable {
+public class Tank extends MovableObject implements IMovable {
 
     private Character mDirection;
     private final long speed = 250;
@@ -36,70 +37,43 @@ public class Tank extends GameObject implements IMovable {
         this.centerY = (this.posY + (this.mHeight / 2));
     }
 
-    //Implemented Methods
-    /**
-     * move____() methods NOTE :
-     *  Calls a helper method to check if the object has collided with another object and if it has then move it back the way it came
-     * */
-    public void moveLeft() {
+    //Override Methods
+
+    @Override
+    public void translatePosition(MovingDirection direction) {
+        super.translatePosition(direction);
         ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
-        long fps = GameView.getFps();
-        posX = posX - (speed / (fps + 1));
-        mMovingDirection = MovingDirection.LEFT;
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
                 if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
-                    posX = posX + (speed / (fps + 1));
+                    translatePositionHelper(direction);
                 }
             }
         }
         updateCenters();
     }
-    public void moveRight() {
-        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
-        long fps = GameView.getFps();
-        posX = posX + (speed / (fps + 1));
-//        mDirection = 'r';
-        mMovingDirection = MovingDirection.RIGHT;
-        for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
-            if(!this.equals(listOfPotentialColliders.get(iterator))){
-                if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
-                    posX = posX - (speed / (fps + 1));
-                }
-            }
+
+    private void translatePositionHelper(MovingDirection direction){
+        switch(direction){
+            case UP:
+                super.translatePosition(MovingDirection.DOWN);
+                this.setBitmapFile(mContext, R.drawable.ptankup);
+                break;
+            case DOWN:
+                super.translatePosition(MovingDirection.UP);
+                this.setBitmapFile(mContext, R.drawable.ptankdown);
+                break;
+            case LEFT:
+                super.translatePosition(MovingDirection.RIGHT);
+                this.setBitmapFile(mContext, R.drawable.ptankleft);
+                break;
+            case RIGHT:
+                super.translatePosition(MovingDirection.LEFT);
+                this.setBitmapFile(mContext, R.drawable.ptankright);
+                break;
         }
-        updateCenters();
     }
-    public void moveUp() {
-        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
-        long fps = GameView.getFps();
-        posY = posY - (speed / (fps + 1));
-//        mDirection = 'u';
-        mMovingDirection = UP;
-        for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
-            if(!this.equals(listOfPotentialColliders.get(iterator))){
-                if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
-                    posY = posY + (speed / (fps + 1));
-                }
-            }
-        }
-        updateCenters();
-    }
-    public void moveDown() {
-        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
-        long fps = GameView.getFps();
-        posY = posY + (speed / (fps + 1));
-//        mDirection = 'd';
-        mMovingDirection = MovingDirection.DOWN;
-        for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
-            if(!this.equals(listOfPotentialColliders.get(iterator))){
-                if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
-                    posY = posY - (speed / (fps + 1));
-                }
-            }
-        }
-        updateCenters();
-    }
+    
     public boolean getIsMovingLeft(){ return isMovingLeft; }
     public boolean getIsMovingRight() { return isMovingRight; }
     public boolean getIsMovingDown() { return isMovingDown; }
@@ -162,6 +136,7 @@ public class Tank extends GameObject implements IMovable {
     public void toggleCanFire(){
         canFire = (canFire == true) ? false : true;
     }
+
 }
 
 /*
