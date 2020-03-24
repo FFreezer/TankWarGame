@@ -19,7 +19,7 @@ public class Shell extends MovableObject implements IMovable {
     private Tank mShellOwner;
     private final long speed = 450;
 
-    Shell(Context context, Tank owner, MovingDirection direction, int x, int y) {
+    Shell(GameView gameView, Context context, Tank owner, MovingDirection direction, int x, int y) {
         this.mContext = context;
         this.mShellOwner = owner;
         this.posX = x;

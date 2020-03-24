@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import com.example.tankwargame.CollisionDetector;
 import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameObjectStorage;
+import com.example.tankwargame.GameView;
 import com.example.tankwargame.Interfaces.IMovable;
 import com.example.tankwargame.R;
 import java.util.ArrayList;
@@ -19,7 +20,8 @@ public class Tank extends MovableObject implements IMovable {
     private long centerY;
 
     //Constructor
-    public Tank(Context context, int bitmapResource, int x, int y, MovingDirection direction){
+    public Tank(GameView gameView, Context context, int bitmapResource, int x, int y, MovingDirection direction){
+        mGameView = gameView;
         this.mContext = context;
         this.mBitmapFile = BitmapFactory.decodeResource(context.getResources(), bitmapResource);
         this.posX = x;
@@ -123,7 +125,7 @@ public class Tank extends MovableObject implements IMovable {
                     break;
             }
 //            GameObject shell = new Shell(mContext, this, mDirection, spawnLocationX, spawnLocationY);
-            GameObject shell = new Shell(mContext, this, mMovingDirection, spawnLocationX, spawnLocationY);
+            GameObject shell = new Shell(mGameView, mContext, this, mMovingDirection, spawnLocationX, spawnLocationY);
             GameObjectStorage.addGameObject(shell);
             GameObjectStorage.addMovableObject((IMovable) shell);
             this.toggleCanFire();
@@ -138,6 +140,7 @@ public class Tank extends MovableObject implements IMovable {
     public void destroy() {
         super.destroy();
         GameObjectStorage.removeMovableObject(this);
+        mGameView.destroyTank(this);
     }
 }
 

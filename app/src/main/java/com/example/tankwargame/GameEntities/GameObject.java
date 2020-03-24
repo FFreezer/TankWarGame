@@ -8,6 +8,7 @@ import android.graphics.Paint;
 
 import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameObjectStorage;
+import com.example.tankwargame.GameView;
 
 public abstract class GameObject {
 
@@ -20,6 +21,7 @@ public abstract class GameObject {
             isMovingDown = false;
     protected Context mContext;
     protected MovingDirection mMovingDirection = null;
+    protected GameView mGameView;
 
     //Access Methods
     public long getX() {

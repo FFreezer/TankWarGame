@@ -7,7 +7,7 @@ import com.example.tankwargame.Interfaces.IMovable;
 
 public abstract class MovableObject extends GameObject implements IMovable {
 
-    protected long speed = 350;
+    protected long speed = 450;
 
     public void translatePosition(MovingDirection direction){
         long fps = GameView.getFps();

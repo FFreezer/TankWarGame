@@ -43,7 +43,7 @@ public class GameView extends SurfaceView implements Runnable {
         mPaint = new Paint();
 //        mPaint.setColor(Color.rgb(44,99,44));
         mPaint.setColor(getResources().getColor(R.color.wall_color));
-        initialiseControls();
+//        initialiseControls();
     }
 
     @Override
@@ -156,8 +156,11 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     private void initialiseNewRound(int mapWidth, int mapHeight){
+        GameObjectStorage.movableGameObjects.clear();
+        GameObjectStorage.gameObjects.clear();
         initialiseTanks(mapWidth, mapHeight);
         initialiseMapWalls(mapWidth, mapHeight);
+        initialiseControls();
     }
 
     private void initialiseMapWalls(int mapWidth, int mapHeight){
@@ -184,26 +187,23 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void initialisePlayerTank(int mapWidth, int mapHeight){
         Bitmap mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
-        playerTank = new Tank(mContext, R.drawable.ptankup, ((mapWidth / 2) - (mPlayerTankBitmap.getWidth() / 2)), (mapHeight - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
+        playerTank = new Tank(this, mContext, R.drawable.ptankup, ((mapWidth / 2) - (mPlayerTankBitmap.getWidth() / 2)), (mapHeight - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
         GameObjectStorage.gameObjects.add(0, playerTank);
         GameObjectStorage.movableGameObjects.add(0, playerTank);
     }
 
     private void initialiseAITank(int mapWidth, int mapHeight){
         Bitmap mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
-        aiTank = new EnemyTank(mContext, R.drawable.aitankdown, ((mapWidth / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN, playerTank);
+        aiTank = new EnemyTank(this, mContext, R.drawable.aitankdown, ((mapWidth / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN, playerTank);
         GameObjectStorage.gameObjects.add(1, aiTank);
         GameObjectStorage.movableGameObjects.add(1, aiTank);
     }
 
-//    public static void wipeTank(Tank tank){
-//        if(tank instanceof EnemyTank){
-//            aiTank = null;
-//        }
-//        else if(tank instanceof Tank){
-//            playerTank = null;
-//        }
-//    }
+    public void destroyTank(Tank tank){
+        playerTank = (playerTank != null && playerTank.equals(tank)) ? null : playerTank;
+        aiTank = (aiTank != null && aiTank.equals(tank)) ? null : aiTank;
+        initialiseNewRound(mScreenWidth, mScreenHeight);
+    }
 
     //Game Critical Methods
     @Override
