@@ -59,7 +59,9 @@ public class GameView extends SurfaceView implements Runnable {
         super.onSizeChanged(w, h, oldw, oldh);
         this.mScreenHeight = h;
         this.mScreenWidth = w;
-        initialiseNewRound(w,h);
+        if(oldw == 0 && oldh == 0){
+            initialiseNewRound(w,h);
+        }
     }
 
     //Initializers
@@ -176,15 +178,32 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     private void initialiseTanks(int mapWidth, int mapHeight){
-        Bitmap mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
-        Bitmap mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
-        playerTank = new Tank(mContext, R.drawable.ptankup, ((mapWidth / 2) - (mPlayerTankBitmap.getWidth() / 2)), (mapHeight - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
-        aiTank = new EnemyTank(mContext, R.drawable.aitankdown, ((mapWidth / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN, playerTank);
-        GameObjectStorage.addGameObject(playerTank);
-        GameObjectStorage.addGameObject(aiTank);
-        GameObjectStorage.addMovableObject(playerTank);
-        GameObjectStorage.addMovableObject(aiTank);
+        initialisePlayerTank(mapWidth, mapHeight);
+        initialiseAITank(mapWidth, mapHeight);
     }
+
+    private void initialisePlayerTank(int mapWidth, int mapHeight){
+        Bitmap mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
+        playerTank = new Tank(mContext, R.drawable.ptankup, ((mapWidth / 2) - (mPlayerTankBitmap.getWidth() / 2)), (mapHeight - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
+        GameObjectStorage.gameObjects.add(0, playerTank);
+        GameObjectStorage.movableGameObjects.add(0, playerTank);
+    }
+
+    private void initialiseAITank(int mapWidth, int mapHeight){
+        Bitmap mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
+        aiTank = new EnemyTank(mContext, R.drawable.aitankdown, ((mapWidth / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN, playerTank);
+        GameObjectStorage.gameObjects.add(1, aiTank);
+        GameObjectStorage.movableGameObjects.add(1, aiTank);
+    }
+
+//    public static void wipeTank(Tank tank){
+//        if(tank instanceof EnemyTank){
+//            aiTank = null;
+//        }
+//        else if(tank instanceof Tank){
+//            playerTank = null;
+//        }
+//    }
 
     //Game Critical Methods
     @Override
@@ -243,6 +262,7 @@ public class GameView extends SurfaceView implements Runnable {
             IMovable currentMovableObject = GameObjectStorage.movableGameObjects.get(iterator);
             movableUpdateHelper(currentMovableObject);
         }
+//        EnemyTank tank = (EnemyTank) GameObjectStorage.movableGameObjects.get(1);
         if(aiTank != null){
             aiTank.executeStateLogic();
         }

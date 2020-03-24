@@ -71,4 +71,5 @@ public class EnemyTank extends Tank {
     public State getEvadeState() {
         return evadeState;
     }
+
 }

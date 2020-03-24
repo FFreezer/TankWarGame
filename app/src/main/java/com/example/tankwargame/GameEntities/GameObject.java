@@ -47,22 +47,20 @@ public abstract class GameObject {
 
     public void setDirection(MovingDirection newMovingDirection){ this.mMovingDirection = newMovingDirection; }
 
-    public void toggleIsMovingRight() { this.isMovingRight = (this.isMovingRight == true) ? false : true ;}
+    public void toggleIsMovingRight() { this.isMovingRight = !isMovingRight; }
 
-    public void toggleIsMovingLeft() { this.isMovingLeft = (this.isMovingLeft == true) ? false : true ;}
+    public void toggleIsMovingLeft() { this.isMovingLeft = !isMovingLeft; }
 
-    public void toggleIsMovingUp() { this.isMovingUp = (this.isMovingUp == true) ? false : true ; }
+    public void toggleIsMovingUp() { this.isMovingUp = !isMovingUp; }
 
-    public void toggleIsMovingDown() { this.isMovingDown = (this.isMovingDown == true) ? false : true ;}
+    public void toggleIsMovingDown() { this.isMovingDown = !isMovingDown;}
 
     public void setPosX(long newX) { this.posX = newX; }
 
     public void setPosY(long newY) { this.posY = newY; }
 
     //Unique Methods
-    public void draw(Canvas canvas, Paint paint) {
-        canvas.drawBitmap(mBitmapFile, posX, posY, paint);
-    }
+    public void draw(Canvas canvas, Paint paint) { canvas.drawBitmap(mBitmapFile, posX, posY, paint); }
 
     public void destroy(){
         GameObjectStorage.removeGameObject(this);

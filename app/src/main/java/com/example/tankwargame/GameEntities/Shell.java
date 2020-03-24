@@ -93,7 +93,7 @@ public class Shell extends MovableObject implements IMovable {
             if(CollisionDetector.checkForCollision(this, currentItem)){
                 if(!(currentItem instanceof Wall || currentItem.equals(this.mShellOwner))){
                     this.destroy();
-                    currentItem.destroy();;
+                    currentItem.destroy();
                 }else if(currentItem instanceof Wall){
                     this.destroy();
                 }

@@ -72,7 +72,7 @@ public abstract class State implements IState {
         float xDistanceSqr = xDistance * xDistance;
         float yDistanceSqr = yDistance * yDistance;
         int answer = (int) Math.sqrt(xDistanceSqr + yDistanceSqr);
-        Log.d("Straight Line D : ", answer + "");
+//        Log.d("Straight Line D : ", answer + "");
         return answer;
     }
 

@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
 import com.example.tankwargame.CollisionDetector;
 import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameObjectStorage;
 import com.example.tankwargame.Interfaces.IMovable;
 import com.example.tankwargame.R;
-
 import java.util.ArrayList;
 
 public class Tank extends MovableObject implements IMovable {
@@ -136,6 +134,11 @@ public class Tank extends MovableObject implements IMovable {
         canFire = !canFire;
     }
 
+    @Override
+    public void destroy() {
+        super.destroy();
+        GameObjectStorage.removeMovableObject(this);
+    }
 }
 
 /*

@@ -22,47 +22,51 @@ public class HuntingState extends State implements IState {
     public void Execute() {
         int distance = getStraightLineDistance();
         long changeInTime = System.currentTimeMillis() - State.comparedToTime;
-        if (movementState) {
-            //Do horizontal movement
-            if(isRightOfPlayer()){
-                if(distance > 150){
+        int tankWidth = mAITank.getmWidth() / 4;
+        int tankHeight = mAITank.getmHeight() / 4;
+
+        if(movementState)
+        {
+            if(isRightOfPlayer())
+            {
+                if(getXDistance() > tankWidth) //Stops tank from wobbling side to side
+                {
                     mAITank.translatePosition(MovingDirection.LEFT);
-                }else{
-                    mAITank.changeState(mAITank.getEvadeState());
                 }
-            }else{
-                if(distance > 150){
+            }
+            else
+            {
+                if(getXDistance() > tankWidth) //Stops tank from wobbling side to side
+                {
                     mAITank.translatePosition(MovingDirection.RIGHT);
-                }else{
-                    mAITank.changeState(mAITank.getEvadeState());
                 }
             }
-            if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375)){
+            if((mAITank.isAbleToFire() && isInXRange()) && (changeInTime / 2 > 375))
+            {
                 mAITank.fireShell();
             }
         }
-
-        else { //movementState == false
-            //Do vertical movement
-            if(isAbovePlayer()){
-                if(distance > 500){
+        else
+        {
+            if(isAbovePlayer())
+            {
+                if(getYDistance() > tankHeight) //Stops tank from wobbling up and down
+                {
                     mAITank.translatePosition(MovingDirection.DOWN);
-                }else{
-                    mAITank.changeState(mAITank.getEvadeState());
                 }
             }
-            else{
-                if(distance > 500){
+            else
+            {
+                if(getYDistance() > tankHeight) //Stops tank from wobbling up and down
+                {
                     mAITank.translatePosition(MovingDirection.UP);
-                }else{
-                    mAITank.changeState(mAITank.getEvadeState());
                 }
             }
-            if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375)){
+            if((mAITank.isAbleToFire() && isInYRange()) && (changeInTime / 2 > 375))
+            {
                 mAITank.fireShell();
             }
         }
-
         if(changeInTime > 750){
             updateComparedToTime();
             toggleMovementDirection();
