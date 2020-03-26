@@ -5,7 +5,7 @@ import com.example.tankwargame.GameEntities.EnemyTank;
 import com.example.tankwargame.Interfaces.IState;
 import com.example.tankwargame.GameEntities.Tank;
 
-public class AttackState extends State implements IState {
+public class AttackState extends State {
 
     public AttackState(EnemyTank mAITank, Tank mPlayerTank) {
         super(mAITank, mPlayerTank);

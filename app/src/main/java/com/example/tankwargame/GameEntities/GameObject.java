@@ -15,12 +15,7 @@ public abstract class GameObject {
     protected long posX, posY;
     protected int mWidth, mHeight;
     protected Bitmap mBitmapFile = null;
-    protected boolean isMovingLeft,
-            isMovingRight,
-            isMovingUp,
-            isMovingDown = false;
     protected Context mContext;
-    protected MovingDirection mMovingDirection = null;
     protected GameView mGameView;
 
     //Access Methods
@@ -40,22 +35,10 @@ public abstract class GameObject {
 
     public Context getContext(){ return this.mContext; }
 
-    public MovingDirection getMovingDirection(){ return mMovingDirection; }
-
     //Transformers
     public void setBitmapFile(Context currentContext, int resourceID) {
         this.mBitmapFile = BitmapFactory.decodeResource(currentContext.getResources(), resourceID);
     }
-
-    public void setDirection(MovingDirection newMovingDirection){ this.mMovingDirection = newMovingDirection; }
-
-    public void toggleIsMovingRight() { this.isMovingRight = !isMovingRight; }
-
-    public void toggleIsMovingLeft() { this.isMovingLeft = !isMovingLeft; }
-
-    public void toggleIsMovingUp() { this.isMovingUp = !isMovingUp; }
-
-    public void toggleIsMovingDown() { this.isMovingDown = !isMovingDown;}
 
     public void setPosX(long newX) { this.posX = newX; }
 

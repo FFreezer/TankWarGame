@@ -7,15 +7,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameEntities.EnemyTank;
 import com.example.tankwargame.GameEntities.GameObject;
 import com.example.tankwargame.GameEntities.MapEdge;
+import com.example.tankwargame.GameEntities.PlayerTank;
 import com.example.tankwargame.GameEntities.Tank;
 import com.example.tankwargame.GameEntities.Wall;
 import com.example.tankwargame.Interfaces.IMovable;
@@ -29,7 +28,7 @@ public class GameView extends SurfaceView implements Runnable {
     private Canvas mCanvas;
     private volatile boolean mRunning;
     private static long fps;
-    private Tank playerTank;
+    private PlayerTank playerTank;
     private EnemyTank aiTank;
     private GameControls mControls;
     private int mScreenHeight, mScreenWidth;
@@ -64,100 +63,20 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    /**
+     * Attaches listener events to each of the buttons for moving the player tanks
+     */
     //Initializers
     @SuppressLint("ClickableViewAccessibility")
     private void initialiseControls(){
-        /**
-        * Method Details
-        * Attaches listener events to each of the buttons for moving the player tanks
-        **/
-        //Controls for left button
-        mControls.mButtonLeft.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        playerTank.setBitmapFile(mContext,R.drawable.ptankleft);
-                        playerTank.toggleIsMovingLeft();
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        playerTank.toggleIsMovingLeft();
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        //Controls for right button
-        mControls.mButtonRight.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        playerTank.setBitmapFile(mContext, R.drawable.ptankright);
-                        playerTank.toggleIsMovingRight();
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        playerTank.toggleIsMovingRight();
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        //Controls for up button
-        mControls.mButtonUp.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        playerTank.setBitmapFile(mContext, R.drawable.ptankup);
-                        playerTank.toggleIsMovingUp();
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        playerTank.toggleIsMovingUp();
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        //Controls for down button
-        mControls.mButtonDown.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        playerTank.setBitmapFile(mContext,R.drawable.ptankdown);
-                        playerTank.toggleIsMovingDown();
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        playerTank.toggleIsMovingDown();
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        mControls.mButtonFire.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    playerTank.fireShell();
-                    return true;
-                }
-                return false;
-            }
-        });
+        mControls.assignControlsFor(playerTank);
     }
 
     private void initialiseNewRound(int mapWidth, int mapHeight){
-        GameObjectStorage.movableGameObjects.clear();
-        GameObjectStorage.gameObjects.clear();
+        GameObjectStorage.clearMovableGameObjects();
+        GameObjectStorage.clearGameObjects();
+//        GameObjectStorage.movableGameObjects.clear();
+//        GameObjectStorage.gameObjects.clear();
         initialiseTanks(mapWidth, mapHeight);
         initialiseMapWalls(mapWidth, mapHeight);
         initialiseControls();
@@ -187,16 +106,20 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void initialisePlayerTank(int mapWidth, int mapHeight){
         Bitmap mPlayerTankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ptankup);
-        playerTank = new Tank(this, mContext, R.drawable.ptankup, ((mapWidth / 2) - (mPlayerTankBitmap.getWidth() / 2)), (mapHeight - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
-        GameObjectStorage.gameObjects.add(0, playerTank);
-        GameObjectStorage.movableGameObjects.add(0, playerTank);
+        playerTank = new PlayerTank(this, mContext, R.drawable.ptankup, ((mapWidth / 2) - (mPlayerTankBitmap.getWidth() / 2)), (mapHeight - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
+        GameObjectStorage.addGameObject(0, playerTank);
+        GameObjectStorage.addMovableObject(0, playerTank);
+//        GameObjectStorage.gameObjects.add(0, playerTank);
+//        GameObjectStorage.movableGameObjects.add(0, playerTank);
     }
 
     private void initialiseAITank(int mapWidth, int mapHeight){
         Bitmap mAITankBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.aitankdown);
         aiTank = new EnemyTank(this, mContext, R.drawable.aitankdown, ((mapWidth / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN, playerTank);
-        GameObjectStorage.gameObjects.add(1, aiTank);
-        GameObjectStorage.movableGameObjects.add(1, aiTank);
+        GameObjectStorage.addMovableObject(1, aiTank);
+        GameObjectStorage.addGameObject(1, aiTank);
+//        GameObjectStorage.gameObjects.add(1, aiTank);
+//        GameObjectStorage.movableGameObjects.add(1, aiTank);
     }
 
     public void destroyTank(Tank tank){
@@ -232,12 +155,12 @@ public class GameView extends SurfaceView implements Runnable {
      *          * 7. Unlock canvas and draw
      */
     private void draw() {
-        if (mSurfaceHolder.getSurface().isValid()) { //1
-            this.mCanvas = mSurfaceHolder.lockCanvas(); //2
+        if (mSurfaceHolder.getSurface().isValid()) {
+            this.mCanvas = mSurfaceHolder.lockCanvas();
             this.mCanvas.save(); //2
-            this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color)); //3
+            this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color));
             for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
-                GameObjectStorage.gameObjects.get(iterator).draw(mCanvas, mPaint);
+                GameObjectStorage.getGameObject(iterator).draw(mCanvas, mPaint);
             }
             this.mCanvas.restore();
             this.mSurfaceHolder.unlockCanvasAndPost(mCanvas);
@@ -259,7 +182,8 @@ public class GameView extends SurfaceView implements Runnable {
          * 5. Method logic is complete
          * */
         for(int iterator = 0; iterator < GameObjectStorage.getMovableObjectsSize(); iterator++){
-            IMovable currentMovableObject = GameObjectStorage.movableGameObjects.get(iterator);
+            IMovable currentMovableObject = GameObjectStorage.getMovableGameObject(iterator);
+//            IMovable currentMovableObject = GameObjectStorage.movableGameObjects.get(iterator);
             movableUpdateHelper(currentMovableObject);
         }
 //        EnemyTank tank = (EnemyTank) GameObjectStorage.movableGameObjects.get(1);

@@ -5,7 +5,7 @@ import com.example.tankwargame.GameEntities.EnemyTank;
 import com.example.tankwargame.GameEntities.Tank;
 import com.example.tankwargame.Interfaces.IState;
 
-public class HuntingState extends State implements IState {
+public class HuntingState extends State {
 
     public HuntingState(EnemyTank mAITank, Tank mPlayerTank) {
         super(mAITank, mPlayerTank);
@@ -20,7 +20,7 @@ public class HuntingState extends State implements IState {
     * */
     @Override
     public void Execute() {
-        int distance = getStraightLineDistance();
+//        int distance = getStraightLineDistance();
         long changeInTime = System.currentTimeMillis() - State.comparedToTime;
         int tankWidth = mAITank.getmWidth() / 4;
         int tankHeight = mAITank.getmHeight() / 4;

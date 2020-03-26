@@ -14,10 +14,9 @@ import java.util.ArrayList;
 
 public class Tank extends MovableObject implements IMovable {
 
-    private final long speed = 250;
-    private boolean canFire = true;
-    private long centerX;
-    private long centerY;
+    protected boolean canFire = true;
+    protected long centerX;
+    protected long centerY;
 
     //Constructor
     public Tank(GameView gameView, Context context, int bitmapResource, int x, int y, MovingDirection direction){
@@ -37,7 +36,8 @@ public class Tank extends MovableObject implements IMovable {
     @Override
     public void translatePosition(MovingDirection direction) {
         super.translatePosition(direction);
-        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
+        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.getAllGameObjects();
+//        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
         for(int iterator = 0; iterator < listOfPotentialColliders.size(); iterator++){
             if(!this.equals(listOfPotentialColliders.get(iterator))){
                 if(CollisionDetector.checkForCollision(this, listOfPotentialColliders.get(iterator))){
@@ -73,11 +73,6 @@ public class Tank extends MovableObject implements IMovable {
         }
     }
 
-    public boolean getIsMovingLeft(){ return isMovingLeft; }
-    public boolean getIsMovingRight() { return isMovingRight; }
-    public boolean getIsMovingDown() { return isMovingDown; }
-    public boolean getIsMovingUp() { return isMovingUp; }
-
     //Access Methods
     public long getCenterX(){
         return this.centerX;
@@ -92,11 +87,12 @@ public class Tank extends MovableObject implements IMovable {
     //Transformers
 
     //Class Methods
-    public void updateCenters(){
+    private void updateCenters(){
         centerX = posX + (mWidth / 2);
         centerY = posY + (mHeight / 2);
     }
 
+    @Override
     public void draw(Canvas canvas, Paint paint){
         canvas.drawBitmap(this.mBitmapFile, posX, posY, paint);
     }

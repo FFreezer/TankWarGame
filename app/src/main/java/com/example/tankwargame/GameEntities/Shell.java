@@ -47,7 +47,7 @@ public class Shell extends MovableObject implements IMovable {
         }
     }
 
-    //Unique Methods
+    @Override
     public void draw(Canvas canvas, Paint paint){
 //        canvas.drawBitmap(mBitmapFile, posX, posY, paint);
         canvas.drawBitmap(getBitmapFile(), getX(), getY(), paint);
@@ -62,25 +62,12 @@ public class Shell extends MovableObject implements IMovable {
     //Access Methods
     public Tank getShellOwner(){ return mShellOwner; }
 
-    //Implement Methods
-    public boolean getIsMovingLeft() {
-        return isMovingLeft;
-    }
-    public boolean getIsMovingRight() {
-        return isMovingRight;
-    }
-    public boolean getIsMovingDown() {
-        return isMovingDown;
-    }
-    public boolean getIsMovingUp() {
-        return isMovingUp;
-    }
-
     //Override Methods
     @Override
     public void translatePosition(MovingDirection direction) {
         super.translatePosition(direction);
-        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
+        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.getAllGameObjects();
+//        ArrayList<GameObject> listOfPotentialColliders = GameObjectStorage.gameObjects;
         for(int iterator = 0; iterator < GameObjectStorage.getGameObjectsSize(); iterator++){
             GameObject currentObject = listOfPotentialColliders.get(iterator);
             translatePositionHelper(currentObject);

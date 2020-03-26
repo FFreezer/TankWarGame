@@ -18,8 +18,10 @@ public class Wall extends GameObject {
         mContext = context;
         //Tanks are always created at object index 0 and 1
         GameObject[] tanks = {
-                GameObjectStorage.gameObjects.get(0),
-                GameObjectStorage.gameObjects.get(1)
+                GameObjectStorage.getGameObject(0),
+                GameObjectStorage.getGameObject(1)
+//                GameObjectStorage.gameObjects.get(0),
+//                GameObjectStorage.gameObjects.get(1)
         };
         do{
             Random randomGenerator = new Random();
@@ -45,9 +47,8 @@ public class Wall extends GameObject {
         }while(CollisionDetector.checkForCollision(tanks[0], this) || CollisionDetector.checkForCollision(tanks[1], this));
     }
 
-    public void draw(Canvas canvas, Paint paint){
-        canvas.drawRect(left, top, right, bottom, paint);
-    }
+    @Override
+    public void draw(Canvas canvas, Paint paint){ canvas.drawRect(left, top, right, bottom, paint); }
 
     private void toggleRotation(){
         rotation = !rotation;

@@ -10,7 +10,7 @@ import android.widget.Button;
 
 public class GameActivity extends AppCompatActivity {
 
-    GameView gameView;
+    private GameView mGameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class GameActivity extends AppCompatActivity {
         //Inflate game_buttons.xml layout file into a view & define layout paramaters for it in params
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         View controlsView = LayoutInflater.from(this).inflate(R.layout.game_buttons, null, false);
-        // Get references to user interface buttons and populate class with them for gameView class
+        // Get references to user interface buttons and populate class with them for mGameView class
         Button mButtonLeft = controlsView.findViewById(R.id.button_left);
         Button mButtonDown = controlsView.findViewById(R.id.button_down);
         Button mButtonRight = controlsView.findViewById(R.id.button_right);
@@ -27,27 +27,27 @@ public class GameActivity extends AppCompatActivity {
         Button mButtonFire = controlsView.findViewById(R.id.button_fire);
         GameControls mControls = new GameControls(mButtonLeft,mButtonRight,mButtonUp,mButtonDown,mButtonFire);
 //
-        gameView = new GameView(this, mControls);
-        setContentView(gameView);
+        mGameView = new GameView(this, mControls);
+        setContentView(mGameView);
         addContentView(controlsView, layoutParams);
-        gameView.run();
+        mGameView.run();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        gameView.pause();
+        mGameView.pause();
     }
     @Override
     protected void onResume(){
         super.onResume();
-        gameView.resume();
+        mGameView.resume();
     }
 
     @Override
     protected void onStop(){
         super.onStop();
-        GameObjectStorage.gameObjects.clear();
-        GameObjectStorage.movableGameObjects.clear();
+        GameObjectStorage.clearGameObjects();
+        GameObjectStorage.clearMovableGameObjects();
     }
 }
