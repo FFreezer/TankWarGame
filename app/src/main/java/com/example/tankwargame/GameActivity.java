@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -26,7 +27,7 @@ public class GameActivity extends AppCompatActivity {
         Button mButtonUp = controlsView.findViewById(R.id.button_up);
         Button mButtonFire = controlsView.findViewById(R.id.button_fire);
         GameControls mControls = new GameControls(mButtonLeft,mButtonRight,mButtonUp,mButtonDown,mButtonFire);
-//
+
         mGameView = new GameView(this, mControls);
         setContentView(mGameView);
         addContentView(controlsView, layoutParams);

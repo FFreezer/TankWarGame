@@ -84,6 +84,7 @@ public class Tank extends MovableObject implements IMovable {
 
     public boolean isAbleToFire(){ return this.canFire; }
 
+
     //Transformers
 
     //Class Methods

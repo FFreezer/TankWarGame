@@ -9,6 +9,8 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.tankwargame.Enums.MovingDirection;
 import com.example.tankwargame.GameEntities.EnemyTank;
@@ -32,6 +34,9 @@ public class GameView extends SurfaceView implements Runnable {
     private EnemyTank aiTank;
     private GameControls mControls;
     private int mScreenHeight, mScreenWidth;
+    private int mapWidth;
+    private int mapHeight;
+    private Player mHumanPlayer, mAIPlayer;
 
     //Constructor
     public GameView(Context context, GameControls controls) {
@@ -40,9 +45,9 @@ public class GameView extends SurfaceView implements Runnable {
         this.mControls = controls;
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
-//        mPaint.setColor(Color.rgb(44,99,44));
         mPaint.setColor(getResources().getColor(R.color.wall_color));
-//        initialiseControls();
+        mHumanPlayer = new Player();
+        mAIPlayer = new Player();
     }
 
     @Override
@@ -109,8 +114,7 @@ public class GameView extends SurfaceView implements Runnable {
         playerTank = new PlayerTank(this, mContext, R.drawable.ptankup, ((mapWidth / 2) - (mPlayerTankBitmap.getWidth() / 2)), (mapHeight - (mPlayerTankBitmap.getHeight() * 2)), MovingDirection.UP);
         GameObjectStorage.addGameObject(0, playerTank);
         GameObjectStorage.addMovableObject(0, playerTank);
-//        GameObjectStorage.gameObjects.add(0, playerTank);
-//        GameObjectStorage.movableGameObjects.add(0, playerTank);
+        mHumanPlayer.setTank(playerTank);
     }
 
     private void initialiseAITank(int mapWidth, int mapHeight){
@@ -118,15 +122,71 @@ public class GameView extends SurfaceView implements Runnable {
         aiTank = new EnemyTank(this, mContext, R.drawable.aitankdown, ((mapWidth / 2) - (mAITankBitmap.getWidth() / 2)), mAITankBitmap.getHeight(), MovingDirection.DOWN, playerTank);
         GameObjectStorage.addMovableObject(1, aiTank);
         GameObjectStorage.addGameObject(1, aiTank);
-//        GameObjectStorage.gameObjects.add(1, aiTank);
-//        GameObjectStorage.movableGameObjects.add(1, aiTank);
+        mAIPlayer.setTank(aiTank);
     }
 
+    /**
+     * @param tank
+     *
+     * Check to see which tank is to be destroyed.
+     * Attempt to negate life from player said tank belongs to
+     * If life removal is false then the player has run out of lives and the winner is to be declared
+     */
     public void destroyTank(Tank tank){
-        playerTank = (playerTank != null && playerTank.equals(tank)) ? null : playerTank;
-        aiTank = (aiTank != null && aiTank.equals(tank)) ? null : aiTank;
-        initialiseNewRound(mScreenWidth, mScreenHeight);
+//        playerTank = (playerTank != null && playerTank.equals(tank)) ? null : playerTank;
+        if(playerTank != null && playerTank.equals(tank))
+        {
+            playerTank = null;
+            if(!mHumanPlayer.negateLife())
+            {
+                declareWinner(mAIPlayer);
+            }
+            else
+            {
+                initialiseNewRound(mScreenWidth, mScreenHeight);
+            }
+        }
+
+        if(aiTank != null && aiTank.equals(tank))
+        {
+            aiTank = null;
+            if(!mAIPlayer.negateLife())
+            {
+                declareWinner(mHumanPlayer);
+            }
+            else
+            {
+                initialiseNewRound(mScreenWidth, mScreenHeight);
+            }
+        }
+//        aiTank = (aiTank != null && aiTank.equals(tank)) ? null : aiTank;
+//        initialiseNewRound(mScreenWidth, mScreenHeight);
     }
+
+    private void declareWinner(Player winningPlayer) {
+        mRunning = false;
+        String text = "DRAW";
+        mPaint.setTextSize(80);
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        if(winningPlayer.equals(mHumanPlayer))
+        {
+            text = "YOU WIN";
+            mPaint.setColor(getResources().getColor(R.color.colorPrimary));
+        }
+        if(winningPlayer.equals(mAIPlayer))
+        {
+            text = "YOU LOSE";
+            mPaint.setColor(getResources().getColor(R.color.colorAccent));
+        }
+        this.mCanvas = mSurfaceHolder.lockCanvas();
+        this.mCanvas.save(); //2
+        this.mCanvas.drawColor(getResources().getColor(R.color.game_background_color));
+        this.mCanvas.drawText(text, mScreenWidth / 2, mScreenHeight / 2, mPaint);
+        this.mCanvas.restore();
+        this.mSurfaceHolder.unlockCanvasAndPost(mCanvas);
+    }
+
+
 
     //Game Critical Methods
     @Override
