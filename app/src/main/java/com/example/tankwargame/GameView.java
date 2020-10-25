@@ -185,9 +185,7 @@ public class GameView extends SurfaceView implements Runnable {
         this.mCanvas.restore();
         this.mSurfaceHolder.unlockCanvasAndPost(mCanvas);
     }
-
-
-
+    
     //Game Critical Methods
     @Override
     public void run() {
