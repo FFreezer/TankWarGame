@@ -1,7 +1,14 @@
 <resources>
-    <string name="app_name">TankWarGame</string>
+    <string name="app_name">Tank War</string>
     <string name="button_move_left">&lt;</string>
     <string name="button_move_right">&gt;</string>
     <string name="button_move_up">^</string>
-    <string name="button_move_down">V</string>
+    <string name="button_move_down">v</string>
+    <string name="fire_weapon">FIRE</string>
+    <string name="main_menu_title">Tank War</string>
+    <string name="button_new_game">New Game</string>
+    <string name="button_exit_game">Exit Game</string>
+    <string name="created_by_name">Created By Fraser Fewster</string>
+    <string name="win_text">YOU WIN!</string>
+    <string name="lose_text">YOU LOSE!</string>
 </resources>
